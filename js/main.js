@@ -1,7 +1,3 @@
-var color_urg = 255/10; 
-var pos_top = 0;
-var pos_left = 0;
-var contexts = new Array();
 
 // init
 $(window).load(function () {
@@ -22,7 +18,7 @@ var itemslist = new Array(
     {
         id:2,
         content:'dogs',
-        mean_x:100,
+        mean_x:200,
         mean_y:100,
         count:11
     },
@@ -30,14 +26,14 @@ var itemslist = new Array(
         id:3,
         content:'apples',
         mean_x:100,
-        mean_y:100,
+        mean_y:200,
         count:11
     },
     {
         id:4,
         content:'oranges',
-        mean_x:100,
-        mean_y:100,
+        mean_x:200,
+        mean_y:200,
         count:11
     } // no comma at end!!
 );
@@ -56,24 +52,18 @@ $('#thecanvas').html( function(){
         
         // write html
         $('#thecanvas').append( 
-            '<div id="i_'+ item.id +'" class="btn '+ item.count +'">'
+            '<div id="i_'+ item.id +'" class="btn '+ item.count +'" style="left:'+item.mean_x+'px; top:'+item.mean_y+'px;" >'
                 +'<heading>'
                     + item.content
                 +'</heading>' 
                 +'<section class="details" >'
                     +'<p>id: '+ item.id +'<br>'
-                    +'avg x: ' + item.mean_x +'<br>'
+                    +'count: ' + item.count +'<br>'
+                    +'avg x: ' + item.mean_x +'<br> '
                     +'avg y: ' + item.mean_y +'</p>'
                 +'</section>'
             +'</li>'
         );
-        // absolute position
-        /*
-            $('#m_'+i).css('top',pos_top);
-            $('#m_'+i).css('left',pos_left);
-            pos_top += 30;
-            pos_left += 30;
-        */
     }
    
 
@@ -87,7 +77,7 @@ $('#thecanvas').html( function(){
 $('#thecanvas div').draggable();
 
 $('#thecanvas div').bind( "dragstart", function(event, ui) {
-    $(this).clone().appendTo('#thecanvas');
+    // $(this).clone().appendTo('#thecanvas');
     $(this).siblings().css('z-index','0');
     $(this).css('z-index','10');    
     $(this).children('.details').fadeOut();
@@ -103,7 +93,11 @@ $('#thecanvas div').bind( "dragstop", function(event, ui) {
 });
 
 
-function hello(elem){ alert(elem.id); }
+function hello(elem){
+    x = $(elem).css('left');
+    y = $(elem).css('top');
+    console.log('Item '+elem.id+' moved to: '+x+', '+y); 
+    }
 
 
 /***

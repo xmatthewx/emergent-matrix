@@ -5,7 +5,7 @@
 */
 
 /* Prevent the text contents of draggable elements from being selectable. */
-[draggable] {
+.ui-draggable {
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -16,14 +16,37 @@
 #thecanvas div { 
     float:none; 
     display:block;
+    position:absolute;
     text-align:left;
     background:rgba(255,255,255,0.8);
     width:100px;
     height:20px;
-    
-    cursor: move
-    
-     }
+    }
+
+#thecanvas div:hover { 
+    cursor: move;
+}
+
+/* ----------------------
+   Details
+*/
+
+.details { 
+    display:none; 
+    position:relative; top:1em;
+    padding:5px;
+    margin:0 -10px;
+    background:rgba(255,255,255,0.8);
+    }
+.details p {
+    line-height:1.2em !important;
+    }
+
+#canvas div:hover .details { display:block; }
+
+
+.details p { font-size:1em; margin:5px; }
+
 
 
 
@@ -44,27 +67,6 @@ Icons
 #thecanvas li a:hover { 
  opacity:1;
 }
-
-
-
-
-/* ----------------------
-   Details
-*/
-
-.details { 
-    display:none; 
-    text-align:left; 
-    position:relative; top:1em;
-    padding:5px;
-    background:rgba(255,255,255,0.8);
-    }
-#canvas div:hover .details { display:block; }
-
-
-.details p { font-size:1em; margin:5px; }
-
-
 
 
 
