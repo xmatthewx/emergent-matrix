@@ -1,6 +1,6 @@
 
 $(window).load(function () {
-// all JS in $(window).load
+// all JS inside $(window).load
 
 
 /***
@@ -8,6 +8,10 @@ $(window).load(function () {
  */
 var itemslist = [];
 
+// load remote data:
+// http://api.jquery.com/jQuery.getJSON/
+
+// load locally if available
 if ( !localStorage.getItem('itemslist') ) { 
     console.log("no stored items"); 
     initItems();
@@ -23,18 +27,12 @@ else {
 /***
  * store itemslist
  */
- 
 function storelist() {
-
     theitems = JSON.stringify(itemslist);
-    
     localStorage.itemslist = theitems;
     console.log("stored local: " +localStorage.itemslist);
 }
 
-
-// JSON.parse()
-// JSON.stringify()
 
 /***
  * generate html
@@ -103,8 +101,6 @@ $('#thecanvas li a.icon-trash').click( function(){
     itemslist.splice(nix_it,1);
     $(this).parent().fadeOut("slow");
 });
-
-
 
 
 
