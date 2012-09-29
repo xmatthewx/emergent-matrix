@@ -19,7 +19,7 @@
     text-align:left;
     background:rgba(255,255,255,0.8);
     width:100px;
-    height:100px;
+    height:20px;
     
     cursor: move
     
@@ -55,10 +55,14 @@ Icons
 .details { 
     display:none; 
     text-align:left; 
-    border-top:1px solid #ccc;
-    padding-top:.5em;
+    position:relative; top:1em;
+    padding:5px;
+    background:rgba(255,255,255,0.8);
     }
-.details p { font-size:1em; }
+#canvas div:hover .details { display:block; }
+
+
+.details p { font-size:1em; margin:5px; }
 
 
 
