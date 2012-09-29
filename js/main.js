@@ -82,7 +82,7 @@ $('#thecanvas div').bind( "drag", function(event, ui) {
 $('#thecanvas div').bind( "dragstop", function(event, ui) {
     $(this).children('.details').fadeIn('slow').delay(2000).fadeOut('slow');
     updateitem(this);
-    saveIteration(this);
+    saveIteration(this);//Send data to php for insert
     storelist();
 });
 
