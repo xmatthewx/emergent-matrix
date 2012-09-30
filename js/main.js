@@ -169,9 +169,8 @@ function sendData()
 	var JSONobject = JSON.parse(JSONtext);
  
 	// notice how variables are used
-	var msg = "Number of errors: "+JSONobject.errorsNum+
-		"\n- "+JSONobject.error[0]+
-		"\n- "+JSONobject.error[1];
+	var msg = "Item Iteration Information \n "+JSONobject.item_information;
+		alert(msg);
 
     }
 }
