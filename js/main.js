@@ -86,7 +86,7 @@ $('#thecanvas div').bind( "drag", function(event, ui) {
 $('#thecanvas div').bind( "dragstop", function(event, ui) {
     $(this).children('.details').fadeIn('slow').delay(2000).fadeOut('slow');
     updateitem(this);
-    saveIteration(this);//Send data to php for insert
+    // saveIteration(this);//moved to updateitem() to pass everyting it needs
     storelist();
 });
 
@@ -98,21 +98,25 @@ function updateitem(elem){
     
     // grab info
     id = Number(elem.id.slice(2)) - 1;
-    count = itemslist[id].count;
-    mean_x = itemslist[id].mean_x;
-    mean_y = itemslist[id].mean_y;
+    item = itemslist[id];
+    count = item.count;
+    mean_x = item.mean_x;
+    mean_y = item.mean_y;
     
     // find and update user coordinates
-    user_x = itemslist[id].user_x = Number( $(elem).css('left').slice(0,-2) );
-    user_y = itemslist[id].user_y = Number( $(elem).css('top').slice(0,-2) );
+    user_x = item.user_x = Number( $(elem).css('left').slice(0,-2) );
+    user_y = item.user_y = Number( $(elem).css('top').slice(0,-2) );
 
     // calculate and update mean coordintes    
-    new_x = itemslist[id].mean_x = Math.round( ( mean_x * count + user_x ) / (count + 1) );
-    new_y = itemslist[id].mean_y = Math.round( ( mean_y * count + user_y ) / (count + 1) );
+    new_x = item.mean_x = Math.round( ( mean_x * count + user_x ) / (count + 1) );
+    new_y = item.mean_y = Math.round( ( mean_y * count + user_y ) / (count + 1) );
 
-    console.log( id + ':' + mean_x + ':' + count + ':' + user_x + ':' + new_x );
+    console.log( 'id:'+id + ' mean_x:' + mean_x + ' count:' + count + ' user_x:' + user_x + ' new_x:' + new_x );
     
-    itemslist[id].count = count + 1;
+    item.count = count + 1;
+    
+    saveIteration(item);//Send data to php for insert
+    
     }
 
 //---------------------------------------------------------------------------
@@ -124,15 +128,15 @@ function updateitem(elem){
 	sendData(): 
 */
 
-function saveIteration(elem){
-    x = $(elem).css('left');
-    y = $(elem).css('top');
+function saveIteration(item){
+  //  x = $(elem).css('left'); // passing saveIteration() obj w/ all the data it needs
+  //  y = $(elem).css('top');
     
     var JSONObject = new Object;
     
-    JSONObject.ITEM_ID=elem.id.slice(2);
-    JSONObject.ITEM_X=x.slice(0,-2);
-    JSONObject.ITEM_Y=y.slice(0,-2);
+    JSONObject.ITEM_ID=item.id;
+    JSONObject.ITEM_X=item.user_x;
+    JSONObject.ITEM_Y=item.user_y;
     
     JSONstring = JSON.stringify(JSONObject);
     runAjax(JSONstring);
