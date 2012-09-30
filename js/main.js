@@ -24,7 +24,7 @@ if ( !localStorage.getItem('itemslist') ) {
 else {
     itemslist = localStorage.getItem('itemslist');
     itemslist = JSON.parse(itemslist);
-    console.log("loaded items:" + itemslist); 
+    console.log(itemslist); // console let's you view contents
 }
 
 
@@ -47,10 +47,10 @@ $('#thecanvas').html( function(){
     for(i=0; i<itemslist.length; i++  ){
     
         item = itemslist[i];
-    
-        // write html
+
+        // write swarm item
         $('#thecanvas').append( 
-            '<div id="i_'+ item.id +'" class="btn '+ item.count +'" style="left:'+item.mean_x+'px; top:'+item.mean_y+'px;" >'
+            '<div id="i_'+ item.id +'" class="btn swarm i_'+item.id+' c'+ item.count +'" style="left:'+item.mean_x+'px; top:'+item.mean_y+'px;" >'
                 +'<heading>'
                     + item.content
                 +'</heading>' 
@@ -62,6 +62,29 @@ $('#thecanvas').html( function(){
                 +'</section>'
             +'</div>'
         );
+        
+        if ( item.user_x ) { 
+            console.log( item.id + ' has user input'); 
+            
+            $('div#i_'+item.id+'').removeClass('swarm').addClass('swarm2');
+            
+            // write users item
+            $('#thecanvas').append( 
+                '<div id="i_'+ item.id +'" class="btn user i_'+ item.id +'" style="left:'+item.user_x+'px; top:'+item.user_y+'px;" >'
+                    +'<heading>'
+                        + item.content
+                    +'</heading>' 
+                    +'<section class="details" >'
+                        +'<p>id: '+ item.id +'<br>'
+                        +'count: ' + item.count +'<br>'
+                        +'x diff: ' + item.mean_x +'<br> '
+                        +'y diff: ' + item.mean_y +'</p>'
+                    +'</section>'
+                +'</div>'
+            );
+            
+        } // END if(item.user_x)
+        
     } // END for()
 
 });
@@ -70,29 +93,60 @@ $('#thecanvas').html( function(){
 /***
  * drag events
  */
-$('#thecanvas div').draggable();
+$('#thecanvas div.swarm').draggable();
+$('#thecanvas div.user').draggable();
 
 $('#thecanvas div').bind( "dragstart", function(event, ui) {
     // $(this).clone().appendTo('#thecanvas');
+    
+    // put the item on top
     $(this).siblings().css('z-index','0');
     $(this).css('z-index','10');    
+    
+    // hide popout if showing
     $(this).children('.details').clearQueue().fadeOut();
+    
 });
 
-$('#thecanvas div').bind( "drag", function(event, ui) {
-    $(this).children('.details').css('border-color','red');
+$('#thecanvas div').bind( "drag", function(event, ui) { 
+    // nothing to see here. move along.
 });
 
 $('#thecanvas div').bind( "dragstop", function(event, ui) {
-    $(this).children('.details').fadeIn('slow').delay(2000).fadeOut('slow');
+
+    // show popout
+    id = $(this).attr('id');
+    $('div.'+id+'.swarm2').css('opacity','1.0').css('zIndex','100');
+    $('div.'+id+'.swarm2').children('.details').delay(200).fadeIn('fast').delay(2000).fadeOut('slow');
+    $('div.'+id+'.swarm2').delay(2000).animate({ opacity:0.1 }, 1000).delay(2000); // resetting z-index here disables it above.
+
+    // update then save
     updateitem(this);
-    // saveIteration(this);//moved to updateitem() to pass everyting it needs
-    storelist();
+    
 });
 
 
+$('#thecanvas div.swarm2').hover( 
+    function(){
+        
+        id = $(this).attr('id');
+        $('div.'+id+'').css('border-color','yellow');
+        
+        $(this).animate({ opacity:1.0 }, 1000);
+    },
+    function(){
+        $(this).animate({ opacity:0.1 }, 1000);
+        $('div.'+id+'').css('border-color','transparent');
+        
+    }
+    
+//    
+    
+);
+
+
 /***
- * update session and localstorage
+ * update session, localstorage, then DB
  */
 function updateitem(elem){
     
@@ -115,6 +169,7 @@ function updateitem(elem){
     
     item.count = count + 1;
     
+    storelist();
     saveIteration(item);//Send data to php for insert
     
     }

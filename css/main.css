@@ -4,15 +4,6 @@
    List
 */
 
-/* Prevent the text contents of draggable elements from being selectable. */
-.ui-draggable {
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-
 #thecanvas div { 
     float:none; 
     display:block;
@@ -21,10 +12,27 @@
     background:rgba(255,255,255,0.8);
     width:100px;
     height:20px;
+    border-color:transparent;
+    border-width:3px;
+    opacity:0.6;
+    -moz-user-select:none; /* Prevent the text contents from being selectable */
+    -khtml-user-select:none;
+    -webkit-user-select:none;
+    user-select:none;
     }
 
 #thecanvas div:hover { 
     cursor: move;
+}
+
+#thecanvas div.user {
+    opacity:1.0;
+}
+#thecanvas div.swarm2 {
+    opacity:0.1;
+}
+#thecanvas div.swarm2:hover {
+    cursor:default;
 }
 
 /* ----------------------
@@ -80,6 +88,7 @@ html {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+	background:#333;
 }
 
 body, #thecanvas {
