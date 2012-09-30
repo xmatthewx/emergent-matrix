@@ -170,7 +170,6 @@ function sendData()
  
 	// notice how variables are used
 	var msg = "Item Iteration Information \n "+JSONobject.item_information;
-		alert(msg);
 
     }
 }
