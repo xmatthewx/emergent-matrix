@@ -41,108 +41,118 @@ function storelist() {
 /***
  * generate html
  */
-$('#thecanvas').html( function(){
+pre_render('all'); // render all onload
 
-    // loop thru list
-    for(i=0; i<itemslist.length; i++  ){
+function pre_render(id){
+
+    if (id == 'all') {
+        // loop thru list
+        for(i=0; i<itemslist.length; i++  ){ render(i); }
+    }
+    else { 
+        $('div.i_'+id+'').remove();
+        render(id-1,'pop');         
+    }
     
-        item = itemslist[i];
+} 
+ 
+// render an item. attach events. 
+function render(i,pop){
 
-        // write swarm item
+        item = itemslist[i];
+        
+        // write emergent item
         $('#thecanvas').append( 
             '<div id="i_'+ item.id +'" class="btn swarm i_'+item.id+' c'+ item.count +'" style="left:'+item.mean_x+'px; top:'+item.mean_y+'px;" >'
                 +'<heading>'
                     + item.content
                 +'</heading>' 
                 +'<section class="details" >'
-                    +'<p>id: '+ item.id +'<br>'
-                    +'count: ' + item.count +'<br>'
-                    +'avg x: ' + item.mean_x +'<br> '
-                    +'avg y: ' + item.mean_y +'</p>'
+                    +'<p>' + item.count +' emerged</p>'
                 +'</section>'
             +'</div>'
         );
         
+        // if user has moved item, write it
         if ( item.user_x ) { 
-            console.log( item.id + ' has user input'); 
             
+            // demote emergent clone
             $('div#i_'+item.id+'').removeClass('swarm').addClass('swarm2');
             
             // write users item
             $('#thecanvas').append( 
-                '<div id="i_'+ item.id +'" class="btn user i_'+ item.id +'" style="left:'+item.user_x+'px; top:'+item.user_y+'px;" >'
+                '<div id="i_'+ item.id +'" class="btn user i_'+ item.id +'" style="z-index:10; left:'+item.user_x+'px; top:'+item.user_y+'px;" >'
                     +'<heading>'
                         + item.content
                     +'</heading>' 
-                    +'<section class="details" >'
-                        +'<p>id: '+ item.id +'<br>'
-                        +'count: ' + item.count +'<br>'
-                        +'x diff: ' + item.mean_x +'<br> '
-                        +'y diff: ' + item.mean_y +'</p>'
-                    +'</section>'
                 +'</div>'
             );
-            
+                        
         } // END if(item.user_x)
         
-    } // END for()
-
-});
 
 
-/***
- * drag events
- */
-$('#thecanvas div.swarm').draggable();
-$('#thecanvas div.user').draggable();
 
-$('#thecanvas div').bind( "dragstart", function(event, ui) {
-    // $(this).clone().appendTo('#thecanvas');
+    /***
+     * drag events
+     */
+    $('#thecanvas div.swarm').draggable();
+    $('#thecanvas div.user').draggable();
+
+    $('#thecanvas div').bind( "dragstart", function(event, ui) {
+        // $(this).clone().appendTo('#thecanvas');
     
-    // put the item on top
-    $(this).siblings().css('z-index','0');
-    $(this).css('z-index','10');    
+        // put the item on top
+        $(this).siblings().css('z-index','0');
+        $(this).css('z-index','10');    
     
-    // hide popout if showing
-    $(this).children('.details').clearQueue().fadeOut();
+        // hide popout if showing
+        $(this).children('.details').clearQueue().fadeOut();
     
-});
+    });
 
-$('#thecanvas div').bind( "drag", function(event, ui) { 
-    // nothing to see here. move along.
-});
+    $('#thecanvas div').bind( "drag", function(event, ui) { 
+        // nothing to see here. move along.
+    });
 
-$('#thecanvas div').bind( "dragstop", function(event, ui) {
+    $('#thecanvas div').bind( "dragstop", function(event, ui) {
 
-    // show popout
-    id = $(this).attr('id');
-    $('div.'+id+'.swarm2').css('opacity','1.0').css('zIndex','100');
-    $('div.'+id+'.swarm2').children('.details').delay(200).fadeIn('fast').delay(2000).fadeOut('slow');
-    $('div.'+id+'.swarm2').delay(2000).animate({ opacity:0.1 }, 1000).delay(2000); // resetting z-index here disables it above.
+        // console.log('stopped: '+id);
 
-    // update then save
-    updateitem(this);
+        // update then save
+        updateitem(this);
     
-});
+    });
 
 
-$('#thecanvas div.swarm2').hover( 
-    function(){
-        
-        id = $(this).attr('id');
-        $('div.'+id+'').css('border-color','yellow');
-        
-        $(this).animate({ opacity:1.0 }, 1000);
-    },
-    function(){
-        $(this).animate({ opacity:0.1 }, 1000);
-        $('div.'+id+'').css('border-color','transparent');
-        
+    $('#thecanvas div.swarm2').hover( 
+        function(){ // mousein
+            id = $(this).attr('id');
+            $('div.'+id+'').css('border-color','yellow');
+            $('div.'+id+'.swarm2').css('zIndex',11);
+            $(this).clearQueue().animate({ opacity:1.0 }, 1000);
+        },
+        function(){ // mouseout
+            $(this).animate({ opacity:0.1 }, 1000);
+            $('div.'+id+'').css('border-color','transparent');
+            $('div.'+id+'.swarm2').css('zIndex',1); 
+            $('div.'+id+'.user').css('zIndex',11);
+            
+        }    
+    );
+    
+    // show popout after item update
+    
+    if(pop == 'pop') {
+        console.log('pop: ' + item.id);
+        $('div.i_'+item.id+'.swarm2').css('opacity','1.0').css('zIndex',11);
+        $('div.i_'+item.id+'.swarm2').children('.details').delay(200).fadeIn().delay(2000).fadeOut().delay(1000);
+        $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.1 }, 1000).delay(2000).animate({'z-index':1},0); 
+        $('div.i_'+item.id+'.user').delay(3000).animate({'z-index':11},0); // jQuery sux at pairing z-index & delays
     }
     
-//    
-    
-);
+
+}; // END render()
 
 
 /***
@@ -170,6 +180,7 @@ function updateitem(elem){
     item.count = count + 1;
     
     storelist();
+    pre_render(item.id);
     saveIteration(item);//Send data to php for insert
     
     }
