@@ -12,6 +12,8 @@ if (clearlocal) { localStorage.clear(); }
  * init itemslist
  */
 var itemslist = [];
+var trigger = false;
+
 
 // load remote data:
 // http://api.jquery.com/jQuery.getJSON/
@@ -51,7 +53,7 @@ function pre_render(id){
     }
     else { 
         $('div.i_'+id+'').remove();
-        render(id-1,'pop');         
+        render(id,'pop'); // -1        
     }
     
 } 
@@ -63,10 +65,10 @@ function render(i,pop){
         
         // write emergent item
         $('#thecanvas').append( 
-            '<div id="i_'+ item.id +'" class="btn swarm i_'+item.id+' c'+ item.count +'" style="left:'+item.mean_x+'px; top:'+item.mean_y+'px;" >'
-                +'<heading>'
+            '<div id="i_'+ item.id +'" class="swarm i_'+item.id+' c'+ item.count +'" style="left:'+item.mean_x+'px; top:'+item.mean_y+'px;" >'
+                +'<header>'
                     + item.content
-                +'</heading>' 
+                +'</header>' 
                 +'<section class="details" >'
                     +'<p>' + item.count +' emerged</p>'
                 +'</section>'
@@ -81,10 +83,10 @@ function render(i,pop){
             
             // write users item
             $('#thecanvas').append( 
-                '<div id="i_'+ item.id +'" class="btn user i_'+ item.id +'" style="z-index:10; left:'+item.user_x+'px; top:'+item.user_y+'px;" >'
-                    +'<heading>'
+                '<div id="i_'+ item.id +'" class="user i_'+ item.id +'" style="z-index:10; left:'+item.user_x+'px; top:'+item.user_y+'px;" >'
+                    +'<header>'
                         + item.content
-                    +'</heading>' 
+                    +'</header>' 
                 +'</div>'
             );
                         
@@ -101,7 +103,9 @@ function render(i,pop){
 
     $('#thecanvas div').bind( "dragstart", function(event, ui) {
         // $(this).clone().appendTo('#thecanvas');
-    
+                
+        trigger = true;
+                
         // put the item on top
         $(this).siblings().css('z-index','0');
         $(this).css('z-index','10');    
@@ -116,38 +120,39 @@ function render(i,pop){
     });
 
     $('#thecanvas div').bind( "dragstop", function(event, ui) {
-
-        // console.log('stopped: '+id);
-
         // update then save
-        updateitem(this);
-    
+        if( trigger ) { updateitem(this); }
+        trigger = false; // prevent loops
     });
 
-
+    // reveal pairs of user/emergent 
     $('#thecanvas div.swarm2').hover( 
         function(){ // mousein
             id = $(this).attr('id');
-            $('div.'+id+'').css('border-color','yellow');
-            $('div.'+id+'.swarm2').css('zIndex',11);
+            $('div.'+id+' header').css('border-color','rgb(255,0,255)');
+            $(this).css('zIndex',101);
             $(this).clearQueue().animate({ opacity:1.0 }, 1000);
         },
         function(){ // mouseout
-            $(this).animate({ opacity:0.1 }, 1000);
-            $('div.'+id+'').css('border-color','transparent');
+            $(this).animate({ opacity:0.2 }, 1000);
+            $(this).children('.details').fadeOut('fast');
+            $('div.'+id+' header').css('border-color','transparent');
             $('div.'+id+'.swarm2').css('zIndex',1); 
             $('div.'+id+'.user').css('zIndex',11);
-            
         }    
     );
+    $('#thecanvas div.swarm2').click( function(){
+        $(this).css('zIndex',101);
+        $(this).children('.details').fadeIn('slow');
+    }); 
+    
     
     // show popout after item update
     
     if(pop == 'pop') {
-        console.log('pop: ' + item.id);
         $('div.i_'+item.id+'.swarm2').css('opacity','1.0').css('zIndex',11);
         $('div.i_'+item.id+'.swarm2').children('.details').delay(200).fadeIn().delay(2000).fadeOut().delay(1000);
-        $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.1 }, 1000).delay(2000).animate({'z-index':1},0); 
+        $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.2 }, 1000).delay(2000).animate({'z-index':1},0); 
         $('div.i_'+item.id+'.user').delay(3000).animate({'z-index':11},0); // jQuery sux at pairing z-index & delays
     }
     
@@ -161,7 +166,7 @@ function render(i,pop){
 function updateitem(elem){
     
     // grab info
-    id = Number(elem.id.slice(2)) - 1;
+    id = Number(elem.id.slice(2)); // -1
     item = itemslist[id];
     count = item.count;
     mean_x = item.mean_x;
@@ -175,7 +180,7 @@ function updateitem(elem){
     new_x = item.mean_x = Math.round( ( mean_x * count + user_x ) / (count + 1) );
     new_y = item.mean_y = Math.round( ( mean_y * count + user_y ) / (count + 1) );
 
-    console.log( 'id:'+id + ' mean_x:' + mean_x + ' count:' + count + ' user_x:' + user_x + ' new_x:' + new_x );
+    // console.log( 'id:'+id + ' mean_x:' + mean_x + ' count:' + count + ' user_x:' + user_x + ' new_x:' + new_x );
     
     item.count = count + 1;
     
@@ -286,28 +291,28 @@ function initItems(){
     // add to itemslist
     addlist = [
         {
-            id:1,
+            id:0,
             content:'cats',
             mean_x:100,
             mean_y:100,
             count:3
         },
         {
-            id:2,
+            id:1,
             content:'dogs',
             mean_x:200,
             mean_y:100,
             count:11
         },
         {
-            id:3,
+            id:2,
             content:'apples',
             mean_x:100,
             mean_y:200,
             count:110
         },
         {
-            id:4,
+            id:3,
             content:'oranges',
             mean_x:200,
             mean_y:200,
