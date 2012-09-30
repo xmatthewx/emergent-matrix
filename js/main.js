@@ -2,6 +2,11 @@
 $(window).load(function () {
 // all JS inside $(window).load
 
+/***
+ * debugging
+ */
+clearlocal = false; // clear once to clean local data
+if (clearlocal) { localStorage.clear(); }
 
 /***
  * init itemslist
@@ -19,7 +24,6 @@ if ( !localStorage.getItem('itemslist') ) {
 else {
     itemslist = localStorage.getItem('itemslist');
     itemslist = JSON.parse(itemslist);
-    
     console.log("loaded items:" + itemslist); 
 }
 
@@ -30,7 +34,7 @@ else {
 function storelist() {
     theitems = JSON.stringify(itemslist);
     localStorage.itemslist = theitems;
-    console.log("stored local: " +localStorage.itemslist);
+    // console.log("stored local: " +localStorage.itemslist);
 }
 
 
@@ -56,7 +60,7 @@ $('#thecanvas').html( function(){
                     +'avg x: ' + item.mean_x +'<br> '
                     +'avg y: ' + item.mean_y +'</p>'
                 +'</section>'
-            +'</li>'
+            +'</div>'
         );
     } // END for()
 
@@ -87,10 +91,28 @@ $('#thecanvas div').bind( "dragstop", function(event, ui) {
 });
 
 
+/***
+ * update session and localstorage
+ */
 function updateitem(elem){
-    x = $(elem).css('left');
-    y = $(elem).css('top');
-    console.log('Item '+elem.id+' moved to: '+x+', '+y); 
+    
+    // grab info
+    id = Number(elem.id.slice(2)) - 1;
+    count = itemslist[id].count;
+    mean_x = itemslist[id].mean_x;
+    mean_y = itemslist[id].mean_y;
+    
+    // find and update user coordinates
+    user_x = itemslist[id].user_x = Number( $(elem).css('left').slice(0,-2) );
+    user_y = itemslist[id].user_y = Number( $(elem).css('top').slice(0,-2) );
+
+    // calculate and update mean coordintes    
+    new_x = itemslist[id].mean_x = Math.round( ( mean_x * count + user_x ) / (count + 1) );
+    new_y = itemslist[id].mean_y = Math.round( ( mean_y * count + user_y ) / (count + 1) );
+
+    console.log( id + ':' + mean_x + ':' + count + ':' + user_x + ':' + new_x );
+    
+    itemslist[id].count = count + 1;
     }
 
 //---------------------------------------------------------------------------
@@ -102,7 +124,7 @@ function updateitem(elem){
 	sendData(): 
 */
 
- function saveIteration(elem){
+function saveIteration(elem){
     x = $(elem).css('left');
     y = $(elem).css('top');
     
@@ -198,7 +220,7 @@ function initItems(){
             content:'cats',
             mean_x:100,
             mean_y:100,
-            count:11
+            count:3
         },
         {
             id:2,
@@ -212,19 +234,18 @@ function initItems(){
             content:'apples',
             mean_x:100,
             mean_y:200,
-            count:11
+            count:110
         },
         {
             id:4,
             content:'oranges',
             mean_x:200,
             mean_y:200,
-            count:11
+            count:9
         } // no comma at end!!
     ];   
     
     itemslist = itemslist.concat(addlist);
-    console.log( itemslist[1] );   
     
 };
 
