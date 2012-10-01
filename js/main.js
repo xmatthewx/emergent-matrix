@@ -272,6 +272,41 @@ function sendData()
 }
 
 //---------------------------------------------------------------------------
+/*
+ * To refresh data periodically to maintain consistent data across a multi-user environment using ajax
+ * function definition: refreshData()
+ * Can be called each time the user changes the position of an item [after updateItem()], or some other trigger
+ * or
+ * Can be called at regular intervals of time
+ * Still uncertain of its impact on speed and performance.
+ */
+
+function refreshData(){
+	        // add to itemslist
+	    	var itemdetails = [] ;
+	    	 $.ajax({
+	    	        url: "/emergent-matrix/php/getData.php",
+	    	        async: true,
+	    	        dataType: 'json',
+	    	        success: function(data) {
+	    	        	$.each(data, function(key, value){	
+	    	        		item = itemslist[value.ITEM_ID];
+	    	        		item.mean_x=value.ITEM_MEAN_X;
+	    	        		item.mean_y=value.ITEM_MEAN_Y;
+	    	        		item.count=value.ITEM_COUNT;
+	    	        		storelist();
+	    	        		pre_render(value.ITEM_ID);
+	    	        	}		
+	    	        	);
+	    	        }
+	    	    });
+
+
+
+
+ }
+//var refreshInterval = setInterval(refreshData, 5*1000);//30 seconds
+//refreshData();
 
 /***
  * delete
