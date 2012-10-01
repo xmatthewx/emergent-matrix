@@ -304,7 +304,7 @@ function refreshData(){
 
 
  }
-//var refreshInterval = setInterval(refreshData, 5*1000);//30 seconds
+//var refreshInterval = setInterval(refreshData, 5*1000);//5 seconds
 //refreshData();
 
 /***
