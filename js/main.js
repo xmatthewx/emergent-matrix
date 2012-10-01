@@ -282,8 +282,7 @@ function sendData()
  */
 
 function refreshData(){
-	        // add to itemslist
-	    	var itemdetails = [] ;
+	
 	    	 $.ajax({
 	    	        url: "/emergent-matrix/php/getData.php",
 	    	        async: true,
