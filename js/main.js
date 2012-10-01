@@ -1,19 +1,49 @@
 
+clearlocal = true; // clear once to clean local data and load a new list.
+    if (clearlocal) { localStorage.clear(); }
+    newlist = ['Bananas','Dave C','Melanie C','Katherine M','Jonah B','Ed K','Ted B','Sven','Jamie K','Nick F','Zach L','Anthony D'];
+
+
 $(window).load(function () {
 // all JS inside $(window).load
 
 /***
- * debugging
+ * responsize window size
  */
-clearlocal = false; // clear once to clean local data
-if (clearlocal) { localStorage.clear(); }
+
+var width = $(window).width(); 
+var height = $(window).height();
+//$('#thecanvas').width(width);
+//$('#thecanvas').height(height);
+
+function responsive(){
+    width = $(window).width(); 
+    height = $(window).height();
+    // position labels 
+    n_offset = width/2 - $('#north').outerWidth() / 2;
+    $('#north').css( 'left', n_offset);
+    s_offset = width/2 - $('#south').outerWidth() / 2;
+    $('#south').css( 'left', s_offset);
+    e_offset = height/2 - $('#east').outerHeight() / 2;
+    $('#east').css( 'top', e_offset);
+    w_offset = height/2 - $('#west').outerHeight() / 2;
+    $('#west').css( 'top', w_offset);
+}
+// on load and browser resize
+responsive();
+$(window).resize(function() {
+    responsive();
+});
+
+
+// util
+var anchors = ['width','height','left','top','borderTopLeftRadius','borderTopRightRadius','borderBottomLeftRadius','borderBottomRightRadius'];
 
 /***
  * init itemslist
  */
 var itemslist = [];
 var trigger = false;
-
 
 // load remote data:
 // http://api.jquery.com/jQuery.getJSON/
@@ -65,12 +95,13 @@ function render(i,pop){
         
         // write emergent item
         $('#thecanvas').append( 
-            '<div id="i_'+ item.id +'" class="swarm i_'+item.id+' c'+ item.count +'" style="left:'+item.mean_x+'px; top:'+item.mean_y+'px;" >'
+            '<div id="i_'+ item.id +'" class="swarm i_'+item.id+' c'+ item.count +'" style="left:'+item.mean_x+'%; top:'+item.mean_y+'%;" >'
+                +'<span class="anchor"></span>'
                 +'<header>'
                     + item.content
                 +'</header>' 
                 +'<section class="details" >'
-                    +'<p>' + item.count +' emerged</p>'
+                    +'<p>' + item.count +' inputs</p>'
                 +'</section>'
             +'</div>'
         );
@@ -78,15 +109,30 @@ function render(i,pop){
         // if user has moved item, write it
         if ( item.user_x ) { 
             
-            // demote emergent clone
+            // first mark original emergent before clone
             $('div#i_'+item.id+'').removeClass('swarm').addClass('swarm2');
-            
+            // set anchor on clone. yikes.
+            $('div#i_'+item.id+'.swarm2').children('.anchor')
+                .animate({
+                    
+                    width:'+='+item.count,
+                    height:'+='+item.count,
+                    left:'-='+item.count/2,
+                    top:'-='+item.count/2,
+                    borderTopLeftRadius:'+='+item.count,
+                    borderTopRightRadius:'+='+item.count,
+                    borderBottomLeftRadius:'+='+item.count,
+                    borderBottomRightRadius:'+='+item.count
+                    
+                },700)
+                        
             // write users item
             $('#thecanvas').append( 
-                '<div id="i_'+ item.id +'" class="user i_'+ item.id +'" style="z-index:10; left:'+item.user_x+'px; top:'+item.user_y+'px;" >'
+                '<div id="i_'+ item.id +'" class="user i_'+ item.id +'" style="z-index:10; left:'+item.user_x+'%; top:'+item.user_y+'%;" >'
                     +'<header>'
                         + item.content
                     +'</header>' 
+                    +'<span class="anchor"></span>'
                 +'</div>'
             );
                         
@@ -129,12 +175,30 @@ function render(i,pop){
     $('#thecanvas div.swarm2').hover( 
         function(){ // mousein
             id = $(this).attr('id');
-            $('div.'+id+' header').css('border-color','rgb(255,0,255)');
+            $('div.'+id+' header').css('border-color','orange'); // rgb(255,0,255)
+            $('div.'+id+'').css('zIndex',99);
             $(this).css('zIndex',101);
             $(this).clearQueue().animate({ opacity:1.0 }, 1000);
+            
+            /*  animate anchor on hover?
+                item = itemslist[id.slice(2)];
+                $(this).delay(1000).children('.anchor').animate({
+                
+                    width:'+='+item.count,
+                    height:'+='+item.count,
+                    left:'-='+item.count/2,
+                    top:'-='+item.count/2,
+                    borderTopLeftRadius:'+='+item.count,
+                    borderTopRightRadius:'+='+item.count,
+                    borderBottomLeftRadius:'+='+item.count,
+                    borderBottomRightRadius:'+='+item.count
+                
+                });
+            */
+            
         },
         function(){ // mouseout
-            $(this).animate({ opacity:0.2 }, 1000);
+            $(this).animate({ opacity:0.25 }, 1000);
             $(this).children('.details').fadeOut('fast');
             $('div.'+id+' header').css('border-color','transparent');
             $('div.'+id+'.swarm2').css('zIndex',1); 
@@ -146,13 +210,12 @@ function render(i,pop){
         $(this).children('.details').fadeIn('slow');
     }); 
     
-    
+
     // show popout after item update
-    
     if(pop == 'pop') {
         $('div.i_'+item.id+'.swarm2').css('opacity','1.0').css('zIndex',11);
         $('div.i_'+item.id+'.swarm2').children('.details').delay(200).fadeIn().delay(2000).fadeOut().delay(1000);
-        $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.2 }, 1000).delay(2000).animate({'z-index':1},0); 
+        $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.25 }, 1000).delay(2000).animate({'z-index':1},0); 
         $('div.i_'+item.id+'.user').delay(3000).animate({'z-index':11},0); // jQuery sux at pairing z-index & delays
     }
     
@@ -173,8 +236,12 @@ function updateitem(elem){
     mean_y = item.mean_y;
     
     // find and update user coordinates
-    user_x = item.user_x = Number( $(elem).css('left').slice(0,-2) );
-    user_y = item.user_y = Number( $(elem).css('top').slice(0,-2) );
+
+    x_px = Math.round (Number( $(elem).css('left').slice(0,-2) ));
+    y_px = Math.round (Number( $(elem).css('top').slice(0,-2) ));
+
+    user_x = item.user_x = x_px / width * 100;
+    user_y = item.user_y = y_px / height * 100;
 
     // calculate and update mean coordintes    
     new_x = item.mean_x = Math.round( ( mean_x * count + user_x ) / (count + 1) );
@@ -283,42 +350,52 @@ $('#thecanvas li a.icon-trash').click( function(){
 });
 
 
+/***
+ * UI misc
+ */
+// $('.navbar').delay(2000).slideUp();
+$('.navbar').delay(1000).animate( 
+    {height:'toggle'},1000
+);
+$(document).bind('mousemove',function(e){ // ask jamie: what is this syntax?
+    if (e.pageY < 30) { 
+        $('.navbar').slideDown('slow');
+    };
+});
+$('.navbar').hover( 
+    function(){}, // mouseover
+    function(){ // mouseout
+    $(this).animate( 
+        {height:'toggle'},1000);
+});
+
+
+
 
 /***
  * dummy itemlist
  */
 function initItems(){
     // add to itemslist
-    addlist = [
-        {
-            id:0,
-            content:'cats',
-            mean_x:100,
-            mean_y:100,
-            count:3
-        },
-        {
-            id:1,
-            content:'dogs',
-            mean_x:200,
-            mean_y:100,
-            count:11
-        },
-        {
-            id:2,
-            content:'apples',
-            mean_x:100,
-            mean_y:200,
-            count:110
-        },
-        {
-            id:3,
-            content:'oranges',
-            mean_x:200,
-            mean_y:200,
-            count:9
-        } // no comma at end!!
-    ];   
+    
+    addlist = [];
+    console.log(addlist);
+    xi = 100 / ( newlist.length * 2);
+    xx = xi * 4; 
+    
+    for ( n=0; n < newlist.length; n++ ){
+        
+        addlist.push( {
+            id:n,
+            content:newlist[n],
+            mean_x:xx,
+            mean_y:50,
+            count:0
+            } );
+        console.log(addlist);
+        xx += xi;
+        
+    }
     
     itemslist = itemslist.concat(addlist);
     
