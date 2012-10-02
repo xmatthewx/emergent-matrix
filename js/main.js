@@ -49,7 +49,7 @@ var anchors = ['width','height','left','top','borderTopLeftRadius','borderTopRig
  * init itemslist
  */
 var itemslist = [];
-var trigger = false;
+var drag_active = false;
 
 // load remote data:
 // http://api.jquery.com/jQuery.getJSON/
@@ -160,7 +160,7 @@ function render(i,pop){
     $('#thecanvas div').bind( "dragstart", function(event, ui) {
         // $(this).clone().appendTo('#thecanvas');
                 
-        trigger = true;
+        drag_active = true;
                 
         // put the item on top
         $(this).siblings().css('z-index','0');
@@ -177,8 +177,8 @@ function render(i,pop){
 
     $('#thecanvas div').bind( "dragstop", function(event, ui) {
         // update then save
-        if( trigger ) { updateitem(this); }
-        trigger = false; // prevent loops
+        if( drag_active ) { updateitem(this); }
+        drag_active = false; // prevent loops
     });
 
     // reveal pairs of user/emergent 
@@ -361,15 +361,17 @@ function sendData()
 
 
  function getData(){
-     console.log('initData');
+     // console.log('getData');
 
+     if( !drag_active ) {  // don't update during user drag
+    
  	    	 $.ajax({
  	    	        // url: "/emergent-matrix/php/getData.php",
  	    	        url: '/amazon/matrix/php/getData.php',
  	    	        async: true,
  	    	        dataType: 'json',
  	    	        success: function(data) {
-                        console.log('ajax success');
+                        // console.log('ajax success');
    
    
                         if ( !localStorage.getItem('itemslist') ) { 
@@ -381,16 +383,12 @@ function sendData()
                             // refreshit
                             refreshData(data);                            
                         };
-///
-
-////
-
-
-////
-
 
  	    	        } // END success
  	    	    });
+ 	    }	    
+ 	    else { console.log( 'getData delayed for user drag.' ); }
+ 	    	    
   } // END getData()
 
 function initData(data){
@@ -434,8 +432,9 @@ function refreshData(data){
 
         //  console.log(item.user_x);
 
-    	console.log('updated: '+ theid);
-        pre_render(theid,'nonpop');
+        if( !drag_active ) { // really. plz dont disrupt the user. note: drag active could carry an id and be more specific.
+            pre_render(theid,'nonpop');
+        }
 
     }); // end $.each
 
@@ -443,45 +442,6 @@ function refreshData(data){
    
     
 }
-
-  function refreshDataOLD(){
-  	console.log('refreshData');
-
-  	    	 $.ajax({
-  	    	        // url: "/emergent-matrix/php/getData.php",
-  	    	        url: '/amazon/matrix/php/getData.php',
-  	    	        async: true,
-  	    	        dataType: 'json',
-  	    	        success: function(data) {
-  	    	            console.log('ajax success');
-
-///////
-
-  	    	        	$.each(data, function(key, value){
-
-  	    	        	     theid = value.ITEM_ID;
-
-                              // update stuff
-  	    	        	    item = itemslist[theid];
-  	    	        	    item.mean_x = value.ITEM_MEAN_X;
-  	    	        	    item.mean_y = value.ITEM_MEAN_Y;
-  	    	        	    item.count = value.ITEM_COUNT;
-  	    	        	    item.content = value.ITEM_CONTENT;
-  	    	        	    item.id = value.ITEM_ID;
-
-                            //  console.log(item.user_x);
-
-          	        		console.log('updated: '+ theid);
-          	        	    pre_render(theid,'nonpop');
-
-  	    	        	}); // end $.each
-
-  	    	        	storelist();
-/////
-  	    	        } // END success
-  	    	    });
-   }
-
 
 
 /***
