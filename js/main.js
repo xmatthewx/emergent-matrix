@@ -1,11 +1,17 @@
 
-clearlocal = true; // clear once to clean local data and load a new list.
+clearlocal = false; // clear once to clean local data and load a new list.
     if (clearlocal) { localStorage.clear(); }
-    newlist = ['Bananas','Dave C','Melanie C','Katherine M','Jonah B','Ed K','Ted B','Sven','Jamie K','Nick F','Zach L','Anthony D'];
+    newlist = ['Dave C','Melanie C','Katherine M','Jonah B','Ed K','Ted B','Sven','Jamie K','Nick F','Zach L','Anthony D','Scott',];
+
 
 
 $(window).load(function () {
 // all JS inside $(window).load
+
+
+// periodically get DB data
+var refreshInterval = setInterval(getData, 5*1000);//5 seconds
+
 
 /***
  * responsize window size
@@ -51,7 +57,9 @@ var trigger = false;
 // load locally if available
 if ( !localStorage.getItem('itemslist') ) { 
     console.log("no stored items"); 
-    initItems();
+    // initItems();
+    getData(); // grab data from server on first load. 
+    
 }
 else {
     itemslist = localStorage.getItem('itemslist');
@@ -73,9 +81,11 @@ function storelist() {
 /***
  * generate html
  */
-pre_render('all'); // render all onload
+// pre_render('all'); // render all onload
 
-function pre_render(id){
+
+
+function pre_render(id,pop){
 
     if (id == 'all') {
         // loop thru list
@@ -83,7 +93,7 @@ function pre_render(id){
     }
     else { 
         $('div.i_'+id+'').remove();
-        render(id,'pop'); // -1        
+        render(id,pop); // -1        
     }
     
 } 
@@ -231,7 +241,7 @@ function updateitem(elem){
     // grab info
     id = Number(elem.id.slice(2)); // -1
     item = itemslist[id];
-    count = item.count;
+    count = Number(item.count);
     mean_x = item.mean_x;
     mean_y = item.mean_y;
     
@@ -252,7 +262,7 @@ function updateitem(elem){
     item.count = count + 1;
     
     storelist();
-    pre_render(item.id);
+    pre_render(item.id,'pop');
     saveIteration(item);//Send data to php for insert
     
     }
@@ -341,38 +351,138 @@ function sendData()
 //---------------------------------------------------------------------------
 /*
  * To refresh data periodically to maintain consistent data across a multi-user environment using ajax
- * function definition: refreshData()
+ * function definition: getData()
  * Can be called each time the user changes the position of an item [after updateItem()], or some other trigger
  * or
  * Can be called at regular intervals of time
  * Still uncertain of its impact on speed and performance.
  */
 
-function refreshData(){
+
+
+ function getData(){
+     console.log('initData');
+
+ 	    	 $.ajax({
+ 	    	        // url: "/emergent-matrix/php/getData.php",
+ 	    	        url: '/amazon/matrix/php/getData.php',
+ 	    	        async: true,
+ 	    	        dataType: 'json',
+ 	    	        success: function(data) {
+                        console.log('ajax success');
+   
+   
+                        if ( !localStorage.getItem('itemslist') ) { 
+                            // init it
+                            initData(data);
+                            }
+   
+                        else {
+                            // refreshit
+                            refreshData(data);                            
+                        };
+///
+
+////
+
+
+////
+
+
+ 	    	        } // END success
+ 	    	    });
+  } // END getData()
+
+function initData(data){
+    
+    $.each(data, function(key, value){
+
+	     theid = value.ITEM_ID;
+
+          // create stuff
+	      itemslist.push( {
+                id:theid,
+                content:value.ITEM_CONTENT,
+                mean_x:value.ITEM_MEAN_X,
+                mean_y:value.ITEM_MEAN_Y,
+                count:value.ITEM_COUNT
+            });
+
+	}); // end $.each
+
+    console.log('success: ' + itemslist);
+
+	storelist();
+    pre_render('all');
 	
-	    	 $.ajax({
-	    	        url: "/emergent-matrix/php/getData.php",
-	    	        async: true,
-	    	        dataType: 'json',
-	    	        success: function(data) {
-	    	        	$.each(data, function(key, value){	
-	    	        		item = itemslist[value.ITEM_ID];
-	    	        		item.mean_x=value.ITEM_MEAN_X;
-	    	        		item.mean_y=value.ITEM_MEAN_Y;
-	    	        		item.count=value.ITEM_COUNT;
-	    	        		storelist();
-	    	        		pre_render(value.ITEM_ID);
-	    	        	}		
-	    	        	);
-	    	        }
-	    	    });
+}
 
 
+function refreshData(data){
+ 
+    $.each(data, function(key, value){
+
+         theid = value.ITEM_ID;
+
+          // update stuff
+        item = itemslist[theid];
+        item.mean_x = value.ITEM_MEAN_X;
+        item.mean_y = value.ITEM_MEAN_Y;
+        item.count = value.ITEM_COUNT;
+        item.content = value.ITEM_CONTENT;
+        item.id = value.ITEM_ID;
+
+        //  console.log(item.user_x);
+
+    	console.log('updated: '+ theid);
+        pre_render(theid,'nonpop');
+
+    }); // end $.each
+
+    storelist();
+   
+    
+}
+
+  function refreshDataOLD(){
+  	console.log('refreshData');
+
+  	    	 $.ajax({
+  	    	        // url: "/emergent-matrix/php/getData.php",
+  	    	        url: '/amazon/matrix/php/getData.php',
+  	    	        async: true,
+  	    	        dataType: 'json',
+  	    	        success: function(data) {
+  	    	            console.log('ajax success');
+
+///////
+
+  	    	        	$.each(data, function(key, value){
+
+  	    	        	     theid = value.ITEM_ID;
+
+                              // update stuff
+  	    	        	    item = itemslist[theid];
+  	    	        	    item.mean_x = value.ITEM_MEAN_X;
+  	    	        	    item.mean_y = value.ITEM_MEAN_Y;
+  	    	        	    item.count = value.ITEM_COUNT;
+  	    	        	    item.content = value.ITEM_CONTENT;
+  	    	        	    item.id = value.ITEM_ID;
+
+                            //  console.log(item.user_x);
+
+          	        		console.log('updated: '+ theid);
+          	        	    pre_render(theid,'nonpop');
+
+  	    	        	}); // end $.each
+
+  	    	        	storelist();
+/////
+  	    	        } // END success
+  	    	    });
+   }
 
 
- }
-//var refreshInterval = setInterval(refreshData, 5*1000);//5 seconds
-//refreshData();
 
 /***
  * delete
@@ -411,18 +521,18 @@ $('.navbar').hover(
  */
 function initItems(){
     // add to itemslist
-    
+
     addlist = [];
     console.log(addlist);
     xi = 100 / ( newlist.length * 2);
     xx = xi * 4; 
-    
+
     for ( n=0; n < newlist.length; n++ ){
-        
+
         addlist.push( {
             id:n,
             content:newlist[n],
-            mean_x:xx,
+            mean_x:50,
             mean_y:50,
             count:0
             } );
