@@ -3,25 +3,6 @@ clearlocal = false; // clear once to clean local data and load a new list.
     if (clearlocal) { localStorage.clear(); }
     newlist = ['Dave C','Melanie C','Katherine M','Jonah B','Ed K','Ted B','Sven','Jamie K','Nick F','Zach L','Anthony D','Scott',];
 
-
-
-$(window).load(function () {
-// all JS inside $(window).load
-
-
-// periodically get DB data
-var refreshInterval = setInterval(getData, 5*1000);//5 seconds
-
-
-/***
- * responsize window size
- */
-
-var width = $(window).width(); 
-var height = $(window).height();
-//$('#thecanvas').width(width);
-//$('#thecanvas').height(height);
-
 function responsive(){
     width = $(window).width(); 
     height = $(window).height();
@@ -37,34 +18,49 @@ function responsive(){
 }
 // on load and browser resize
 responsive();
+
+$(window).load(function () {
+// all JS inside $(window).load
+
+
+// periodically get DB data
+var refreshInterval = setInterval(getData, 10*1000);//5 seconds
+
+
+/***
+ * responsize window size
+ */
+var width = $(window).width(); 
+var height = $(window).height();
+
 $(window).resize(function() {
     responsive();
 });
 
 
 // util
-var anchors = ['width','height','left','top','borderTopLeftRadius','borderTopRightRadius','borderBottomLeftRadius','borderBottomRightRadius'];
+// not in use: var anchors = ['width','height','left','top','borderTopLeftRadius','borderTopRightRadius','borderBottomLeftRadius','borderBottomRightRadius'];
 
 /***
  * init itemslist
  */
 var itemslist = [];
 var drag_active = false;
-
-// load remote data:
-// http://api.jquery.com/jQuery.getJSON/
+var first_drag = true;
+var first_visit = true;
 
 // load locally if available
 if ( !localStorage.getItem('itemslist') ) { 
     console.log("no stored items"); 
     // initItems();
     getData(); // grab data from server on first load. 
-    
 }
 else {
     itemslist = localStorage.getItem('itemslist');
     itemslist = JSON.parse(itemslist);
     console.log(itemslist); // console let's you view contents
+    pre_render('all'); // draw from local
+    first_visit = false;
 }
 
 
@@ -81,9 +77,6 @@ function storelist() {
 /***
  * generate html
  */
-// pre_render('all'); // render all onload
-
-
 
 function pre_render(id,pop){
 
@@ -93,7 +86,7 @@ function pre_render(id,pop){
     }
     else { 
         $('div.i_'+id+'').remove();
-        render(id,pop); // -1        
+        render(id,pop);       
     }
     
 } 
@@ -102,6 +95,7 @@ function pre_render(id,pop){
 function render(i,pop){
 
         item = itemslist[i];
+        // console.log(i);
         
         // write emergent item
         $('#thecanvas').append( 
@@ -177,8 +171,8 @@ function render(i,pop){
 
     $('#thecanvas div').bind( "dragstop", function(event, ui) {
         // update then save
-        if( drag_active ) { updateitem(this); }
-        drag_active = false; // prevent loops
+        if( drag_active ) { updateitem(this); }        
+            drag_active = false; // prevent loops. do not put inside if statement. 
     });
 
     // reveal pairs of user/emergent 
@@ -189,23 +183,7 @@ function render(i,pop){
             $('div.'+id+'').css('zIndex',99);
             $(this).css('zIndex',101);
             $(this).clearQueue().animate({ opacity:1.0 }, 1000);
-            
-            /*  animate anchor on hover?
-                item = itemslist[id.slice(2)];
-                $(this).delay(1000).children('.anchor').animate({
-                
-                    width:'+='+item.count,
-                    height:'+='+item.count,
-                    left:'-='+item.count/2,
-                    top:'-='+item.count/2,
-                    borderTopLeftRadius:'+='+item.count,
-                    borderTopRightRadius:'+='+item.count,
-                    borderBottomLeftRadius:'+='+item.count,
-                    borderBottomRightRadius:'+='+item.count
-                
-                });
-            */
-            
+                        
         },
         function(){ // mouseout
             $(this).animate({ opacity:0.25 }, 1000);
@@ -228,7 +206,7 @@ function render(i,pop){
         $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.25 }, 1000).delay(2000).animate({'z-index':1},0); 
         $('div.i_'+item.id+'.user').delay(3000).animate({'z-index':11},0); // jQuery sux at pairing z-index & delays
     }
-    
+
 
 }; // END render()
 
@@ -239,7 +217,7 @@ function render(i,pop){
 function updateitem(elem){
     
     // grab info
-    id = Number(elem.id.slice(2)); // -1
+    id = Number(elem.id.slice(2));
     item = itemslist[id];
     count = Number(item.count);
     mean_x = item.mean_x;
@@ -262,10 +240,42 @@ function updateitem(elem){
     item.count = count + 1;
     
     storelist();
-    pre_render(item.id,'pop');
+
+    /* // prompt on first visit
+    if ( first_drag && first_visit ){ 
+        showinfo(id); 
+        first_drag = false; 
+    }
+    else { 
+        pre_render(item.id,'pop'); 
+    }
+    */
+    pre_render(item.id,'pop'); 
     saveIteration(item);//Send data to php for insert
     
-    }
+}
+
+// prompt on first visit
+function showinfo(id){
+    
+    drag_active = true;
+
+    console.log('showinfo' + ' dragactive: ' + drag_active );
+
+    $('#info').show();
+    $('#info').css('zIndex','102');
+    $('html').click( function(){ 
+        $('#info').fadeOut(); 
+        drag_active = false;
+        pre_render(id,'pop');
+    });
+    $('#info button').click( function(){ 
+        drag_active = false;
+        pre_render(id,'pop');
+     });
+    
+};
+
 
 //---------------------------------------------------------------------------
 /* Send Item's new position to setData.php in JSON
@@ -408,7 +418,8 @@ function initData(data){
 
 	}); // end $.each
 
-    console.log('success: ' + itemslist);
+    console.log('init success:');
+    console.log(itemslist);
 
 	storelist();
     pre_render('all');
@@ -455,25 +466,22 @@ $('#thecanvas li a.icon-trash').click( function(){
 
 
 /***
- * UI misc
+ * menu
  */
-// $('.navbar').delay(2000).slideUp();
-$('.navbar').delay(1000).animate( 
-    {height:'toggle'},1000
-);
-$(document).bind('mousemove',function(e){ // ask jamie: what is this syntax?
-    if (e.pageY < 30) { 
-        $('.navbar').slideDown('slow');
-    };
-});
-$('.navbar').hover( 
-    function(){}, // mouseover
-    function(){ // mouseout
-    $(this).animate( 
-        {height:'toggle'},1000);
-});
-
-
+/*
+    $('.navbar').delay(1000).animate(  {height:'toggle'},1000 );
+    $(document).bind('mousemove',function(e){ // ask jamie: what is this syntax?
+        if (e.pageY < 30) { 
+            $('.navbar').slideDown('slow');
+        };
+    });
+    $('.navbar').hover( 
+        function(){}, // mouseover
+        function(){ // mouseout
+        $(this).animate( 
+            {height:'toggle'},1000);
+    });
+*/
 
 
 /***

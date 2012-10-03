@@ -21,7 +21,7 @@ body {
     background:none;
     opacity:0.9;
     }
-#thecanvas div header { 
+#thecanvas div header, #info strong { 
     background:rgba(255,255,255,0.8);
     width:auto;
     display:inline-block;
@@ -117,6 +117,9 @@ span.anchor {
     z-index:0;
 }
 
+
+
+
 /* ----------------------
    labels
 */
@@ -150,6 +153,55 @@ span.anchor {
 }
 
 /* ----------------------
+   prompts
+*/
+
+#info {
+    display:none;
+    z-index:101;
+    color:white;
+    position:absolute; top:30%;
+    width:80%;
+    margin-left:7%;
+    padding:0 10px;
+    border:1px solid white;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background:rgba(0,0,0,1);
+    background:rgba(178,204,204,0.9);
+}
+#info button { color:white; opacity:0.8; }
+#info button:hover { color:white; opacity:1; }
+
+#info p { 
+    text-align:center; 
+    margin:.75em 0;
+    }
+
+#info strong { /* fake items */
+    position:relative;
+    display:inline-block;
+    color:black;
+    border:0;
+}
+#info span { /* fake anchors */
+    position:absolute;
+    top:-4px; left:-4px;
+    height:8px; width:8px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border:1px solid rgba(0,0,0,0.5);
+     }
+#info span.user { 
+    background:rgba(0,0,0,0.5);
+    border-color:transparent;
+    z-index:0;
+}  
+    
+    
+/* ----------------------
    Stylins!
 */
 
@@ -169,9 +221,9 @@ body, #thecanvas {
 
 .container { width:100%; }
 
+.navbar { z-index:2; display:none; }
 .navbar .brand { margin-left:-5px; }
 
-.navbar { z-index:2; }
 
-
-
+  
+    
