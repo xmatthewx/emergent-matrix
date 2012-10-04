@@ -187,12 +187,12 @@ function render(i,pop){
             $('div.'+id+'').css('zIndex',99);
             $(this).css('zIndex',101);
             $(this).clearQueue().animate({ opacity:1.0 }, 1000);    
-            $('span.'+id+'').clearQueue().animate({ opacity:1.0 }, 1000); // anchor circle
+            $('span.'+id+'.swarm2').clearQueue().animate({ opacity:1.0 }, 1000); // anchor circle
         },
         function(){ // mouseout
             id = $(this).attr('id');
             $(this).animate({ opacity:0.25 }, 1000);
-            $('span.'+id+'').clearQueue().animate({ opacity:0.25 }, 1000); // anchor circle
+            $('span.'+id+'.swarm2').clearQueue().animate({ opacity:0.25 }, 1000); // anchor circle
             $(this).children('.details').fadeOut('fast');
             $('div.'+id+' header').css('border-color','transparent');
             $('div.'+id+'.swarm2').css('zIndex',1); 
