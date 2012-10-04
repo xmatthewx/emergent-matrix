@@ -39,13 +39,13 @@ body {
     cursor: move;
 }
 
-#thecanvas div.user {
+#thecanvas .user {
     opacity:1.0;
 }
-#thecanvas div.swarm2 {
+#thecanvas .swarm2 {
     opacity:0.25;
 }
-#thecanvas div.swarm2:hover {
+#thecanvas .swarm2:hover {
     cursor:default;
 }
 
@@ -103,18 +103,20 @@ Icons
 
 span.anchor {
     position:absolute;
-    top:-4px; left:-4px;
+    margin-top:-5px; margin-left:-5px;
     height:8px; width:8px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
     border:1px solid rgba(0,0,0,0.5);
     z-index:1;
+    opacity:0.25;
 }
-.user span.anchor {
+.anchor.user {
     background:rgba(0,0,0,0.5);
     border-color:transparent;
     z-index:0;
+    opacity:1;
 }
 
 
@@ -185,7 +187,7 @@ span.anchor {
     color:black;
     border:0;
 }
-#info span { /* fake anchors */
+#info span { /* fake anchors for instructions */
     position:absolute;
     top:-4px; left:-4px;
     height:8px; width:8px;

@@ -24,7 +24,7 @@ $(window).load(function () {
 
 
 // periodically get DB data
-var refreshInterval = setInterval(getData, 10*1000);//5 seconds
+// var refreshInterval = setInterval(getData, 5*1000);//5 seconds
 
 
 /***
@@ -85,8 +85,8 @@ function pre_render(id,pop){
         for(i=0; i<itemslist.length; i++  ){ render(i); }
     }
     else { 
-        $('div.i_'+id+'').remove();
-        render(id,pop);       
+        $('.i_'+id+'').remove(); // remove item
+        render(id,pop);       // recreate item
     }
     
 } 
@@ -100,7 +100,6 @@ function render(i,pop){
         // write emergent item
         $('#thecanvas').append( 
             '<div id="i_'+ item.id +'" class="swarm i_'+item.id+' c'+ item.count +'" style="left:'+item.mean_x+'%; top:'+item.mean_y+'%;" >'
-                +'<span class="anchor"></span>'
                 +'<header>'
                     + item.content
                 +'</header>' 
@@ -108,25 +107,29 @@ function render(i,pop){
                     +'<p>' + item.count +' inputs</p>'
                 +'</section>'
             +'</div>'
+            +'<span class="swarm i_'+ item.id +' anchor" style="left:'+item.mean_x+'%; top:'+item.mean_y+'%;"></span>'
         );
         
         // if user has moved item, write it
         if ( item.user_x ) { 
-            
+
             // first mark original emergent before clone
-            $('div#i_'+item.id+'').removeClass('swarm').addClass('swarm2');
-            // set anchor on clone. yikes.
-            $('div#i_'+item.id+'.swarm2').children('.anchor')
+            $('.i_'+item.id+'').removeClass('swarm').addClass('swarm2');
+            
+            // animate anchor on clone. yikes.
+            radius = Math.sqrt(item.count/Math.PI); // radius of count as area
+            if( radius < 4 ){ radius = 4; }
+            $('span.i_'+item.id+'.swarm2')
                 .animate({
                     
-                    width:'+='+item.count,
-                    height:'+='+item.count,
-                    left:'-='+item.count/2,
-                    top:'-='+item.count/2,
-                    borderTopLeftRadius:'+='+item.count,
-                    borderTopRightRadius:'+='+item.count,
-                    borderBottomLeftRadius:'+='+item.count,
-                    borderBottomRightRadius:'+='+item.count
+                    width:'+='+radius*2,
+                    height:'+='+radius*2,
+                    marginLeft:'-='+radius,
+                    marginTop:'-='+radius,
+                    borderTopLeftRadius:'+='+radius*2,
+                    borderTopRightRadius:'+='+radius*2,
+                    borderBottomLeftRadius:'+='+radius*2,
+                    borderBottomRightRadius:'+='+radius*2
                     
                 },700)
                         
@@ -136,8 +139,8 @@ function render(i,pop){
                     +'<header>'
                         + item.content
                     +'</header>' 
-                    +'<span class="anchor"></span>'
                 +'</div>'
+                +'<span class="anchor user i_'+ item.id +'" style="left:'+item.user_x+'%; top:'+item.user_y+'%;"></span>'
             );
                         
         } // END if(item.user_x)
@@ -179,19 +182,22 @@ function render(i,pop){
     $('#thecanvas div.swarm2').hover( 
         function(){ // mousein
             id = $(this).attr('id');
-            $('div.'+id+' header').css('border-color','orange'); // rgb(255,0,255)
+            // access one with (this), both in a pair with (div.id)
+            $('div.'+id+' header').css('border-color','orange'); 
             $('div.'+id+'').css('zIndex',99);
             $(this).css('zIndex',101);
-            $(this).clearQueue().animate({ opacity:1.0 }, 1000);
-                        
+            $(this).clearQueue().animate({ opacity:1.0 }, 1000);    
+            $('span.'+id+'').clearQueue().animate({ opacity:1.0 }, 1000); // anchor circle
         },
         function(){ // mouseout
+            id = $(this).attr('id');
             $(this).animate({ opacity:0.25 }, 1000);
+            $('span.'+id+'').clearQueue().animate({ opacity:0.25 }, 1000); // anchor circle
             $(this).children('.details').fadeOut('fast');
             $('div.'+id+' header').css('border-color','transparent');
             $('div.'+id+'.swarm2').css('zIndex',1); 
             $('div.'+id+'.user').css('zIndex',11);
-        }    
+        }
     );
     $('#thecanvas div.swarm2').click( function(){
         $(this).css('zIndex',101);
