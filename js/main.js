@@ -24,7 +24,7 @@ $(window).load(function () {
 
 
 // periodically get DB data
-// var refreshInterval = setInterval(getData, 5*1000);//5 seconds
+var refreshInterval = setInterval(getData, 5*1000);//5 seconds
 
 
 /***
@@ -106,6 +106,7 @@ function render(i,pop){
                 +'<section class="details" >'
                     +'<p>' + item.count +' inputs</p>'
                 +'</section>'
+                +'<span class="anchor"></span>'
             +'</div>'
             +'<span class="swarm i_'+ item.id +' anchor" style="left:'+item.mean_x+'%; top:'+item.mean_y+'%;"></span>'
         );
@@ -139,8 +140,8 @@ function render(i,pop){
                     +'<header>'
                         + item.content
                     +'</header>' 
+                    +'<span class="anchor"></span>'
                 +'</div>'
-                +'<span class="anchor user i_'+ item.id +'" style="left:'+item.user_x+'%; top:'+item.user_y+'%;"></span>'
             );
                         
         } // END if(item.user_x)
