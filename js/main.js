@@ -176,7 +176,7 @@ function render(i,pop){
     $('#thecanvas div').bind( "dragstop", function(event, ui) {
         // update then save
         if( drag_active ) { updateitem(this); }        
-            drag_active = false; // prevent loops. do not put inside if statement. 
+            drag_active = false; // prevent loops. don't put inside if statement. don't move to updateitem()
     });
 
     // reveal pairs of user/emergent 
@@ -248,7 +248,7 @@ function updateitem(elem){
     
     storelist();
 
-    /* // prompt on first visit
+    /* // prompt on first visit  */
     if ( first_drag && first_visit ){ 
         showinfo(id); 
         first_drag = false; 
@@ -256,11 +256,11 @@ function updateitem(elem){
     else { 
         pre_render(item.id,'pop'); 
     }
-    */
-    pre_render(item.id,'pop'); 
+
+//  pre_render(item.id,'pop'); 
     saveIteration(item);//Send data to php for insert
     
-}
+} END updateitem()
 
 // prompt on first visit
 function showinfo(id){
