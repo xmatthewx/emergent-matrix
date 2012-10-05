@@ -155,18 +155,16 @@ function render(i,pop){
     $('#thecanvas div.swarm').draggable();
     $('#thecanvas div.user').draggable();
 
-    $('#thecanvas div').bind( "dragstart", function(event, ui) {
-        // $(this).clone().appendTo('#thecanvas');
-                
+    $('#thecanvas div').bind( "dragstart", function(event, ui) {                
         drag_active = true;
                 
         // put the item on top
         $(this).siblings().css('z-index','0');
         $(this).css('z-index','10');    
+        $(this).css('box-shadow','1px 1px 7px rgba(0,0,0,0.2)');
     
         // hide popout if showing
-        $(this).children('.details').clearQueue().fadeOut();
-    
+        $(this).children('.details').clearQueue().fadeOut();    
     });
 
     $('#thecanvas div').bind( "drag", function(event, ui) { 

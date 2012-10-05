@@ -35,6 +35,12 @@ body {
 #thecanvas div header:hover { 
     background:rgba(255,255,221,1);
 }
+#thecanvas div header.drag {
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
+    
+}
+
+
 #thecanvas div:hover { 
     cursor: move;
 }
