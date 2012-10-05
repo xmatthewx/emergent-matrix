@@ -492,6 +492,7 @@ $('#thecanvas li a.icon-trash').click( function(){
 /***
  * dummy itemlist
  */
+/* ready to delete?
 function initItems(){
     // add to itemslist
 
@@ -517,6 +518,8 @@ function initItems(){
     itemslist = itemslist.concat(addlist);
     
 };
+*/
+
 
 
 // END $(window).load

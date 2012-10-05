@@ -238,5 +238,17 @@ body, #thecanvas {
 .navbar .brand { margin-left:-5px; }
 
 
-  
+/* ----------------------
+   forms
+*/
+
+form { 
+    width:500px;
+    margin:2em auto; 
+    padding:2em 20px;
+    background:rgba(255,255,255,0.4);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
     
+    }
