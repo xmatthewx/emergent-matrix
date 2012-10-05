@@ -260,7 +260,7 @@ function updateitem(elem){
 //  pre_render(item.id,'pop'); 
     saveIteration(item);//Send data to php for insert
     
-} END updateitem()
+} // END updateitem()
 
 // prompt on first visit
 function showinfo(id){
