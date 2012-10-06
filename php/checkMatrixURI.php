@@ -3,7 +3,7 @@ include "config.php";
 
 /*
  * checkMatrixURI()
- * returns 1 if URI already exists MATRIX table
+ * returns 1 if URI already exists in the MATRIX table
  * return 0 if URI does not exist in the MATRIX table
  */
 function checkMatrixURI($matrixURI)
