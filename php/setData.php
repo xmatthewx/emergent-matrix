@@ -1,39 +1,97 @@
 <?php
 include "config.php";
 
-$string=str_replace ('\"','"', $_GET['json']);
-$new_iteration = json_decode($string);
-
-$item_id=$new_iteration->ITEM_ID;
-$item_x=$new_iteration->ITEM_X;
-$item_y=$new_iteration->ITEM_Y;
-
-$result = mysql_query("SELECT ITEM_MEAN_X,ITEM_MEAN_Y,ITEM_COUNT FROM ITEMS WHERE ITEM_ID=$new_iteration->ITEM_ID");
-
-if (!$result) {
-	echo 'Could not run query: ' . mysql_error();
-	exit;
+/*
+ * selectData()
+ * return the current row data associated with a particular ItemId from the ITEMS table
+ */
+function selectData($newIteration)
+{
+	$itemId=$newIteration->ITEM_ID;
+	$result = mysql_query("SELECT ITEM_MEAN_X,ITEM_MEAN_Y,ITEM_COUNT FROM ITEMS WHERE ITEM_ID=$itemId");	
+	if (!$result) {
+		echo 'Could not run query: ' . mysql_error();
+		exit;
+	}	
+	$row = mysql_fetch_row($result);	
+	return $row;	
 }
 
-$row = mysql_fetch_row($result);
+/*
+ * calculateNewMeans()
+ * uses the current row data for an Item from the ITEMS table and the new position selected by the user to calculate 
+ * the new means and the new count
+ * returns the calculated data
+ */
+function calculateNewMeans($newIteration,$currentRecord)
+{
+	$itemId=$newIteration->ITEM_ID;
+	$itemX=$newIteration->ITEM_X;
+	$itemY=$newIteration->ITEM_Y;
 
-//calculate new mean
-$new_count = $row[2] + 1;
-$new_mean_x = ( ( $row[0] * $row[2] ) + $item_x ) / $new_count;
-$new_mean_y = ( ( $row[1]* $row[2] ) + $item_y ) /$new_count;
+	//calculate new mean
+	$newCount = $currentRecord[2] + 1;
+	$newMeanX = ( ( $currentRecord[0] * $currentRecord[2] ) + $itemX ) / $newCount;
+	$newMeanY = ( ( $currentRecord[1]* $currentRecord[2] ) + $itemY ) /$newCount;
+	
+	$newRecord=array($itemId,$itemX,$itemY,$newCount,$newMeanX,$newMeanY);	
+	return $newRecord;
+}
 
-$sql_insert= "insert into ITEM_ITERATIONS(ITEM_ID,ITEM_X,ITEM_Y,ITEM_MEAN_X,ITEM_MEAN_Y)
-		 VALUES($item_id,$item_x,$item_y,$new_mean_x,$new_mean_y)";
 
-mysql_query($sql_insert);
+/*
+ * inserts a new record into the ITEM_ITERATIONS table
+ */
+function insertData($newRecord)
+{
+	$itemId=$newRecord[0];
+	$itemX=$newRecord[1];
+	$itemY=$newRecord[2];
+	$itemCount=$newRecord[3];
+	$itemMeanX=$newRecord[4];
+	$itemMeanY=$newRecord[5];
+	
+	$sql_insert= "insert into ITEM_ITERATIONS(ITEM_ID,ITEM_X,ITEM_Y,ITEM_MEAN_X,ITEM_MEAN_Y)
+	VALUES($itemId,$itemX,$itemY,$itemMeanX,$itemMeanY)";
+	mysql_query($sql_insert);
+	mysql_query("COMMIT");
+}
 
-$sql_update="update ITEMS set ITEM_COUNT=$new_count, ITEM_MEAN_X=$new_mean_x, ITEM_MEAN_Y=$new_mean_y WHERE ITEM_ID=$item_id";
+/*
+ * updates the ITEMS table with the calculated means 
+*/
+function updateData($newRecord)
+{
+	$itemId=$newRecord[0];
+	$itemX=$newRecord[1];
+	$itemY=$newRecord[2];
+	$itemCount=$newRecord[3];
+	$itemMeanX=$newRecord[4];
+	$itemMeanY=$newRecord[5];
+	
+	$sql_update="update ITEMS set ITEM_COUNT=$itemCount, ITEM_MEAN_X=$itemMeanX, ITEM_MEAN_Y=$itemMeanY WHERE ITEM_ID=$itemId";
+	mysql_query($sql_update);
+	mysql_query("COMMIT");
+}
 
-mysql_query($sql_update);
+
+$string=str_replace ('\"','"', $_GET['json']);
+
+$newIteration = json_decode($string);
+$currentRecord=selectData($newIteration);
+
+if($currentRecord)
+{
+	
+$newRecord=calculateNewMeans($newIteration, $currentRecord);
+insertData($newRecord);
+updateData($newRecord);
+
+}
 
 // create response object
 $json = array();
-$json['item_information'] = $string;
+$json['item_information'] = $newRecord;
  
 // encode array $json to JSON string
 $encoded = json_encode($json);
