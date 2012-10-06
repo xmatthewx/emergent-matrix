@@ -17,7 +17,7 @@ function checkMatrixURI($matrixURI)
 $matrixURI=$_GET['matrixURI'];
 $uriAlreadyExists=checkMatrixURI($matrixURI);
 
-// encode array $json to JSON string
+// encode $uriAlreadyExists to JSON string
 echo json_encode($uriAlreadyExists);
 
 ?>
