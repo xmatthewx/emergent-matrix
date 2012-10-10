@@ -2,7 +2,6 @@
 
 $(window).load(function () {
 // all JS inside $(window).load
-
 console.log('loaded');
 
 /***
@@ -10,25 +9,25 @@ console.log('loaded');
  */
  
 // trigger more input for items as needed
-$('#inputI3').focus( function(){ xitem(); });
+$('#item_3').focus( function(){ xitem(); });
 
 function xitem(){ 
     // clone the last item input field
  	var template = $("section#items .control-group").last().clone(); 	
- 	i = Number( template.find("input").attr('id').slice(6) );
- 	n = i + 1;
+ 	i = Number( template.find("input").attr('id').slice(5) ); 
+ 	n = i + 1; // next item
  
  	if( n < 16 ){
 
     	template.find(".add-on").text(n);
-    	template.find("input").attr('id','inputI'+ n);
+    	template.find("input").attr('id','item_'+ n).attr('name','MATRIX_ITEMS[]');
 
     	$("section#items").append(template);    
 
-    	$('#inputI' + n).focus( function(){ xitem(); }); 	    
+    	$('#item_' + n).focus( function(){ xitem(); }); 	    
  	}
     
-    $('#inputI' + i ).unbind('focus'); // trigger from each only once
+    $('#item_' + i ).unbind('focus'); // trigger from each only once
     
 };
 
@@ -43,8 +42,8 @@ $('.checkbox').change( function(){
         $('form button').removeAttr("disabled");
         
     }
-    
-     });
+// END $(window).load
+});
 
 
 // END $(window).load

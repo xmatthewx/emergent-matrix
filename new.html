@@ -34,24 +34,24 @@
 
         <div class="container">
 
-            <form class="form-horizontal">
+            <form class="form-horizontal" action="php/newMatrix.php" method="post" >
                 
                 <div class="control-group">
-                    <label class="control-label" for="inputTitle">Title</label>
+                    <label class="control-label" for="matrix_title">Title</label>
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">&#187;</span>
-                            <input id="inputTitle" size="16" type="text" placeholder="The title">
+                            <input name="MATRIX_TITLE" id="matrix_title" size="16" type="text" placeholder="The title">
                         </div>
                     </div>
                 </div>
                 
                 <div class="control-group">
-                    <label class="control-label" for="inputURL">URL</label>
+                    <label class="control-label" for="MATRIX_URI">URL</label>
                     <div class="controls">
                         <div class="input-prepend input-append">
                             <span class="add-on">&#187;</span>
-                            <input class="span2" type="text" id="inputURL" placeholder="URL"><button class="btn" type="button">Check</button>
+                            <input class="span2" type="text" name="MATRIX_URI" id="matrix_uri" placeholder="URL"><button class="btn" type="button">Check</button>
                         </div>
                     </div>
                 </div>
@@ -59,11 +59,11 @@
                 <section id="categories">
                     
                     <div class="control-group">
-                        <label class="control-label" for="north">Categories</label>
+                        <label class="control-label" for="matrix_north">Categories</label>
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">1</span>
-                                <input type="text" id="catNorth" placeholder="north">
+                                <input type="text" name="MATRIX_CATS[]" id="matrix_north" placeholder="north">
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">2</span>
-                                <input type="text" id="catEast" placeholder="east">
+                                <input type="text" name="MATRIX_CATS[]" id="matrix_east" placeholder="east">
                             </div>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">3</span>
-                                <input type="text" id="catSouth" placeholder="south">
+                                <input type="text" name="MATRIX_CATS[]" id="matrix_south" placeholder="south">
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">4</span>
-                                <input type="text" id="catWest" placeholder="west">
+                                <input type="text" name="MATRIX_CATS[]" id="matrix_west" placeholder="west">
                             </div>
                         </div>
                     </div>
@@ -97,11 +97,11 @@
                 <section id="items">
                     
                     <div class="control-group">
-                        <label class="control-label" for="inputI1">Items</label>
+                        <label class="control-label" for="item_1">Items</label>
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">1</span>
-                                <input type="text" id="inputI1" placeholder="item name">
+                                <input type="text" name="MATRIX_ITEMS[]" id="item_1" placeholder="item name">
                             </div>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">2</span>
-                                <input type="text" id="inputI2" placeholder="item name">
+                                <input type="text" name="MATRIX_ITEMS[]" id="item_2" placeholder="item name">
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">3</span>
-                                <input type="text" id="inputI3" placeholder="item name">
+                                <input type="text" name="MATRIX_ITEMS[]" id="item_3" placeholder="item name">
                             </div>
                         </div>
                     </div>
@@ -127,13 +127,13 @@
                 <div class="control-group">
                     <div class="controls">
                         <span class="help-block">Unlock this puzzle to help us avoid junk:</span>
-                        <label class="checkbox inline">
+                        <label class="checkbox inline" for="test1" >
                           <input type="checkbox" id="test1" value="option1"> Check
                         </label>
-                        <label class="checkbox inline">
-                          <input type="checkbox" id="test2" value="option2"> Don't
+                        <label class="checkbox inline" for="test2">
+                          <input type="checkbox" name="TEST2" id="test2" value="option2"> Don't
                         </label>
-                        <label class="checkbox inline">
+                        <label class="checkbox inline" for="test3">
                           <input type="checkbox" id="test3" value="option3"> Check
                         </label>
                     </div>
