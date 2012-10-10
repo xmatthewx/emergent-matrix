@@ -13,8 +13,10 @@ include "config.php";
 
 $matrixUri = $_POST["MATRIX_URI"];
 $matrixTitle = $_POST["MATRIX_TITLE"];
-$matrixCategories = $_POST["MATRIX_CATS"]; // an array. does mySQL need us to make a string of it??
+$matrixCategories = $_POST["MATRIX_CATS"]; // an array 
+$matrixCategories = implode(",", $matrixCategories); // as string 
 $matrixItems = $_POST["MATRIX_ITEMS"];
+$matrixItems = implode(",", $matrixItems);
 
 /* 
  * We need to remove blank MATRIX ITEMS
