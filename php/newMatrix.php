@@ -29,6 +29,8 @@ unset($matrixItems[$b]);
 
 $matrixItems = implode(",", $matrixItems);
 
+//store the form data in an array
+$matrixData=array("matrixUri"=>$matrixUri,"matrixCategories"=>$matrixCategories,"matrixItems"=>$matrixItems,"matrixTitle"=>$matrixTitle);
 
 
 // avoid spam!!
@@ -36,16 +38,16 @@ if ( $_POST["TEST2"] ) { // kill the operation!
     $spammer = true; 
     } 
 else {
-    insertData();
+    insertData($matrixData);
 }
 
 
 /*
  * inserts a new record into the MATRIX table
  */
-function insertData() {
-	$sql_insert= "insert into MATRIX(MATRIX_URI,MATRIX_CATS,MATRIX_TITLE)
-	VALUES($matrixUri,$matrixCategories,$matrixTitle)";
+function insertData($matrixData) {
+	$sql_insert= "insert into MATRIX(MATRIX_URI,MATRIX_CATS,MATRIX_ITEMS,MATRIX_TITLE)
+	VALUES('$matrixData[matrixUri]','$matrixData[matrixCategories]','$matrixData[matrixItems]','$matrixData[matrixTitle]')";
 	mysql_query($sql_insert);
 	mysql_query("COMMIT");
 }
