@@ -8,7 +8,7 @@ include "config.php";
  */
 function checkMatrixURI($matrixURI)
 {
-	$result = mysql_query("select COUNT(*) from MATRIX where MATRIX_URI=$matrixURI");
+	$result = mysql_query("select COUNT(*) from MATRIX where MATRIX_URI='$matrixURI'");
 	$count=mysql_fetch_row($result);
 	return $count;
 	// return $matrixURI;
