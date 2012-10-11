@@ -1,11 +1,32 @@
-
-
 $(window).load(function () {
 // all JS inside $(window).load
 console.log('loaded');
 
+
 /***
- * forms
+ * uri check
+ */
+
+// $('button#uri_check').click( function() {
+$('#matrix_uri').blur( function() {
+     new_uri = $('#matrix_uri').val();
+     console.log('checking: ' + new_uri);
+     
+     $.post('php/checkMatrixURI.php',{new_uri:new_uri},function(data) {
+          console.log('response: ' + data);
+          
+          if ( data == 0 ) { $('#matrix_uri').css('color','green'); }
+          else { $('#matrix_uri').css('color','red'); }
+          
+        });
+     return false;
+
+ });
+
+
+
+/***
+ * item fields
  */
  
 // trigger more input for items as needed
@@ -32,7 +53,9 @@ function xitem(){
 };
 
 
-// unlock
+/***
+ * spam blocking
+ */
 $('.checkbox').change( function(){ 
     
 //    console.log( $('#test1:checked').val() );

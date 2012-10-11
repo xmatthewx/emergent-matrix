@@ -11,6 +11,11 @@ include "config.php";
         TEST2 // only gets delivered if TRUE. evidence of SPAM!
 */
 
+
+$theuri = $_SERVER['REQUEST_URI'];
+echo $theuri;
+
+
 $matrixUri = $_POST["MATRIX_URI"];
 $matrixTitle = $_POST["MATRIX_TITLE"];
 $matrixCategories = $_POST["MATRIX_CATS"]; // an array 

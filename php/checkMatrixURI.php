@@ -8,13 +8,16 @@ include "config.php";
  */
 function checkMatrixURI($matrixURI)
 {
-
 	$result = mysql_query("select COUNT(*) from MATRIX where MATRIX_URI=$matrixURI");
 	$count=mysql_fetch_row($result);
 	return $count;
+	// return $matrixURI;
 }
 
-$matrixURI=$_GET['matrixURI'];
+// $matrixURI=$_GET['matrixURI'];
+$matrixURI=$_POST['new_uri'];
+
+
 $uriAlreadyExists=checkMatrixURI($matrixURI);
 
 // encode $uriAlreadyExists to JSON string
