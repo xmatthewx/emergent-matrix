@@ -21,22 +21,14 @@ $matrixTitle = $_POST["MATRIX_TITLE"];
 $matrixCategories = $_POST["MATRIX_CATS"]; // an array 
 $matrixCategories = implode(",", $matrixCategories); // as string 
 $matrixItems = $_POST["MATRIX_ITEMS"];
+
+//Removing blank items from the array
+$blank_items = array_keys($matrixItems,"");
+foreach ($blank_items as $b)
+unset($matrixItems[$b]);
+
 $matrixItems = implode(",", $matrixItems);
 
-/* 
- * We need to remove blank MATRIX ITEMS
- * (not sure that i can do it on the front end)
- * Something like this:
- 
-    array_filter($_POST['MATRIX_ITEMS'],"remove_empty")
-    function remove_empty($val) {
-        if ($val==="") {
-            // array_splice(array,start,length,array)
-        };
-        return false;
-    };
-
-*/
 
 
 // avoid spam!!
