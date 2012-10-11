@@ -18,7 +18,7 @@ $('#matrix_uri').blur( function() {
           if ( data == 0 ) { $('#matrix_uri').css('color','green'); }
           else { $('#matrix_uri').css('color','red'); }
           
-        });
+        },'json');
      return false;
 
  });
