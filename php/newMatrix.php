@@ -12,8 +12,8 @@ include "config.php";
 */
 
 
-$theuri = $_SERVER['REQUEST_URI'];
-echo $theuri;
+// $theuri = $_SERVER['REQUEST_URI'];
+// echo $theuri;
 
 
 $matrixUri = $_POST["MATRIX_URI"];
@@ -52,10 +52,16 @@ else {
  * inserts a new record into the MATRIX table
  */
 function insertData() {
-	$sql_insert= "insert into MATRIX(MATRIX_URI,MATRIX_CATS,MATRIX_TITLE)
-	VALUES($matrixUri,$matrixCategories,$matrixTitle)";
-	mysql_query($sql_insert);
+    echo 'insert data';
+	$sql_insert= "insert into MATRIX(MATRIX_URI,MATRIX_TITLE)
+	VALUES('$matrixUri','$matrixTitle')";
+	$result = mysql_query($sql_insert);
+    if (!$result) {
+        die('Invalid query: ' . mysql_error());
+    }
 	mysql_query("COMMIT");
+	
+	
 }
 
 // if the insert goes ok,
@@ -64,16 +70,14 @@ function insertData() {
 // then we need to make a template that knows what to do with that uri
 
 
-// create response object
-$json = array();
-$json['matrix_info'] = $string;
+header("Location: http://www.google.com/"); /* Redirect browser */
 
-// encode array $json to JSON string
-$encoded = json_encode($json);
- 
+/* Make sure that code below does not get executed when we redirect. */
+exit;
+
 // send response back to index.html
 // and end script execution
-die($encoded);
+die($matrixUri);
 
 
 /*

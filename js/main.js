@@ -3,6 +3,9 @@ clearlocal = false; // clear once to clean local data and load a new list.
     if (clearlocal) { localStorage.clear(); }
     newlist = ['Dave C','Melanie C','Katherine M','Jonah B','Ed K','Ted B','Sven','Jamie K','Nick F','Zach L','Anthony D','Scott',];
 
+
+var server_root = 'http://ideapublic.org/matrix/'
+
 function responsive(){
     width = $(window).width(); 
     height = $(window).height();
@@ -376,13 +379,14 @@ function sendData()
 
 
  function getData(){
-     // console.log('getData');
+     console.log('getData');
 
      if( !drag_active ) {  // don't update during user drag
     
  	    	 $.ajax({
  	    	        // url: "/emergent-matrix/php/getData.php",
- 	    	        url: '/amazon/matrix/php/getData.php',
+ 	    	        // uhh, fix this url:
+ 	    	        url: server_root + 'php/getData.php',
  	    	        async: true,
  	    	        dataType: 'json',
  	    	        success: function(data) {
@@ -434,6 +438,8 @@ function initData(data){
 
 function refreshData(data){
  
+
+    // $.each(data.rows, function(key, val) { 
     $.each(data, function(key, value){
 
          theid = value.ITEM_ID;
