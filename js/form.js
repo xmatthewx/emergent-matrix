@@ -16,11 +16,7 @@ $('#matrix_title').keyup( function(){
 
 var uri_ok;
 $('#matrix_uri').blur( function() {
-    
     check_uri();
-    
-
-
 });
 
 
@@ -58,9 +54,7 @@ function check_uri() {
           }
         
         },'json');
-    
-    
-    
+
 };
 
 

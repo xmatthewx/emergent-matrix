@@ -55,7 +55,7 @@ function insertData($matrixData) {
 	$result2 = mysql_query("COMMIT");
 	if ($result == 1) { 
 	    echo 'success!'; 
-	    header("Location: http://www.ideapublic.org/matrix/?id=".$matrixData[matrixUri]); /* Redirect browser */
+	    header("Location: http://www.ideapublic.org/matrix/matrix.php?id=".$matrixData[matrixUri]); /* Redirect browser */
 	    }
     if ($result2 != 1) {
         die('Invalid commit: ' . mysql_error());
