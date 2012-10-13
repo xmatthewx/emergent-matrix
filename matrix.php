@@ -37,11 +37,15 @@
     
     var cats = data.MATRIX_CATS.split(",")
     console.log(cats);
+    console.log(cats[1]);
     
+$(window).load(function () {
+    $('.container').append('<div id="north" class="label" >north</div><div id="east" class="label" >east</div><div id="south" class="label" >south</div><div id="west" class="label" >west</div>');
     $('#north').text(cats[0]);
     $('#east').text(cats[1]);
     $('#south').text(cats[2]);
     $('#wesrt').text(cats[3]);
+});
     
 </script>
 
@@ -51,10 +55,6 @@
     <div id="thecanvas" class="">
     </div>
 
-    <div id="north" class="label" >technology</div>
-    <div id="east" class="label" >design</div>
-    <div id="south" class="label" >theory</div>
-    <div id="west" class="label" >fine art</div>
 
 <?php include('php/footer.php'); ?>
 
