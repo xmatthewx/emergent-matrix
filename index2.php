@@ -1,3 +1,16 @@
+
+<?php 
+
+if(empty( $_GET['id'] )) {
+    echo 'Make your <a href="" >own matrix</a> or visit one of the others.';
+}
+else { 
+    echo $_GET['bagel'].'<br>'; 
+    echo $_GET['moop']; 
+}
+
+?>
+
 /*
 
 future homepage
