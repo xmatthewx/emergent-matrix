@@ -1,7 +1,7 @@
 <?php
     include('php/header.php');
 
-    // no uri?
+    // does URL have /?uri
     if(empty( $_GET['id'] )) {
         echo '<div class="alert"><strong>Hello</strong>. Make your <a href="" >own matrix</a> or visit one of the others.</div>';
         include('php/footer.php');
@@ -24,22 +24,20 @@
             );            
     }
 
-    $js_data = json_encode($data);
+    $data_js = json_encode($data);
 
 ?>
 
 <script> 
     var uri = '<?php echo $uri ?>';
-    var data = JSON.parse('<?php echo $js_data ?>');
+    var data = JSON.parse('<?php echo $data_js ?>');
     console.log(uri);  
     console.log(data);  
 
     var cats = data.MATRIX_CATS.split(",")
     var items = data.MATRIX_ITEMS.split(",")
-    console.log(cats);
-    console.log(cats[1]);
+    console.log("items");
     console.log(items);
-    console.log(items[1]);
 
     itemslist = [];
     for ( i=0; i < items.length; i++ ) {
