@@ -3,12 +3,14 @@ include "config.php";
 
 /*
  * selectData()
- * return the current row data associated with a particular ItemId from the ITEMS table
+ * return the current row data associated with a particular ID from the ITEMS table
  */
 function selectData($newIteration)
 {
-	$key=$newIteration->KEY;
-	$result = mysql_query("SELECT ITEM_MEAN_X,ITEM_MEAN_Y,ITEM_COUNT FROM ITEMS WHERE ITEM_ID=$itemId");	
+	
+	$id=$newIteration->ID;
+	
+	$result = mysql_query("SELECT ITEM_MEAN_X,ITEM_MEAN_Y,ITEM_COUNT FROM ITEMS WHERE ID='$id'");	
 	if (!$result) {
 		echo 'Could not run query: ' . mysql_error();
 		exit;
@@ -28,13 +30,14 @@ function calculateNewMeans($newIteration,$currentRecord)
 	$itemId=$newIteration->ITEM_ID;
 	$itemX=$newIteration->ITEM_X;
 	$itemY=$newIteration->ITEM_Y;
-
+	$id=$newIteration->ID;
+	
 	//calculate new mean
 	$newCount = $currentRecord[2] + 1;
 	$newMeanX = ( ( $currentRecord[0] * $currentRecord[2] ) + $itemX ) / $newCount;
 	$newMeanY = ( ( $currentRecord[1]* $currentRecord[2] ) + $itemY ) /$newCount;
 	
-	$newRecord=array($itemId,$itemX,$itemY,$newCount,$newMeanX,$newMeanY);	
+	$newRecord=array($id,$itemId,$itemX,$itemY,$newCount,$newMeanX,$newMeanY);	
 	return $newRecord;
 }
 
@@ -44,15 +47,16 @@ function calculateNewMeans($newIteration,$currentRecord)
  */
 function insertData($newRecord)
 {
-	$itemId=$newRecord[0];
-	$itemX=$newRecord[1];
-	$itemY=$newRecord[2];
-	$itemCount=$newRecord[3];
-	$itemMeanX=$newRecord[4];
-	$itemMeanY=$newRecord[5];
+	$id=$newRecord[0];
+	$itemId=$newRecord[1];
+	$itemX=$newRecord[2];
+	$itemY=$newRecord[3];
+	$itemCount=$newRecord[4];
+	$itemMeanX=$newRecord[5];
+	$itemMeanY=$newRecord[6];
 	
-	$sql_insert= "insert into ITEM_ITERATIONS(ITEM_ID,ITEM_X,ITEM_Y,ITEM_MEAN_X,ITEM_MEAN_Y)
-	VALUES($itemId,$itemX,$itemY,$itemMeanX,$itemMeanY)";
+	$sql_insert= "insert into ITEM_ITERATIONS(ID,ITEM_ID,ITEM_X,ITEM_Y,ITEM_MEAN_X,ITEM_MEAN_Y)
+	VALUES($id,$itemId,$itemX,$itemY,$itemMeanX,$itemMeanY)";
 	mysql_query($sql_insert);
 	mysql_query("COMMIT");
 }
@@ -62,14 +66,15 @@ function insertData($newRecord)
 */
 function updateData($newRecord)
 {
-	$itemId=$newRecord[0];
-	$itemX=$newRecord[1];
-	$itemY=$newRecord[2];
-	$itemCount=$newRecord[3];
-	$itemMeanX=$newRecord[4];
-	$itemMeanY=$newRecord[5];
+	$id=$newRecord[0];
+	$itemId=$newRecord[1];
+	$itemX=$newRecord[2];
+	$itemY=$newRecord[3];
+	$itemCount=$newRecord[4];
+	$itemMeanX=$newRecord[5];
+	$itemMeanY=$newRecord[6];
 	
-	$sql_update="update ITEMS set ITEM_COUNT=$itemCount, ITEM_MEAN_X=$itemMeanX, ITEM_MEAN_Y=$itemMeanY WHERE ITEM_ID=$itemId";
+	$sql_update="update ITEMS set ITEM_COUNT=$itemCount, ITEM_MEAN_X=$itemMeanX, ITEM_MEAN_Y=$itemMeanY WHERE ID='$id'";
 	mysql_query($sql_update);
 	mysql_query("COMMIT");
 }
