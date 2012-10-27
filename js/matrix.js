@@ -385,7 +385,7 @@ function sendData()
      // console.log('getData. active: ' + !first_drag);
 
      if( !drag_active && !first_drag ) {  // don't update during user drag
-    
+            console.log('get data');            
  	    	 $.ajax({
  	    	        // url: "/emergent-matrix/php/getData.php",
  	    	        // uhh, fix this url:
@@ -393,8 +393,7 @@ function sendData()
  	    	        async: true,
  	    	        dataType: 'json',
  	    	        success: function(data) {
-                        // console.log('ajax success');
-   
+                        console.log('ajax success');
    
                         if ( !localStorage.getItem('itemslist') ) { 
                             // init it
