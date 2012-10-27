@@ -34,15 +34,19 @@ if ( $_POST["TEST2"] ) { // kill the operation!
     $spammer = true; 
     } 
 else {
-    insertData($matrixData);
+    insertMatrixData($matrixData);
+    
+    //If matrix data and item data have been inserted successfully, redirect to following url
+    header("Location: http://www.ideapublic.org/matrix/matrix.php?id=".$matrixData[matrixUri]); /* Redirect browser */
 }
 
 
 /*
  * inserts a new record into the MATRIX table
  */
-function insertData($matrixData) {
-    echo 'insert data';
+function insertMatrixData($matrixData) {
+	//echo being commented because weirdly, this gives a problem when using header("") in a php file.
+   	//echo 'insert data';
     
     $sql_insert= "insert into MATRIX(MATRIX_URI,MATRIX_CATS,MATRIX_ITEMS,MATRIX_TITLE)
 	VALUES('$matrixData[matrixUri]','$matrixData[matrixCategories]','$matrixData[matrixItems]','$matrixData[matrixTitle]')";
@@ -54,13 +58,53 @@ function insertData($matrixData) {
 
 	$result2 = mysql_query("COMMIT");
 	if ($result == 1) { 
-	    echo 'success!'; 
-	    header("Location: http://www.ideapublic.org/matrix/matrix.php?id=".$matrixData[matrixUri]); /* Redirect browser */
+		//If matrix data has been inserted successfully, insert item data
+	    insertItemData();
+	    
 	    }
     if ($result2 != 1) {
         die('Invalid commit: ' . mysql_error());
     }
     
+}
+/*
+ * inserts new records into the ITEM table
+*/
+function insertItemData() {
+
+	$matrixItems = $_POST["MATRIX_ITEMS"];
+
+	//Removing blank items from the array
+	$blank_items = array_keys($matrixItems,"");
+	foreach ($blank_items as $b)
+		unset($matrixItems[$b]);
+	
+	//fetch latest matrix id
+	$lastMatrixId=mysql_fetch_array(mysql_query("SELECT MAX(MATRIX_ID) FROM MATRIX"));
+	$matrixId=$lastMatrixId[0];
+	
+	foreach ($matrixItems as $eachItem) {
+		
+		//fetch latest item id
+		$lastItemId=mysql_fetch_array(mysql_query("SELECT MAX(ITEM_ID) FROM ITEMS"));		
+		$itemId=$lastItemId[0]+1;
+		
+		$sql_insert= "insert into ITEMS(ITEM_ID, MATRIX_ID, ITEM_CONTENT)
+		VALUES('$itemId','$matrixId','$eachItem')";
+
+		$result = mysql_query($sql_insert);
+		if (!$result) {
+			die('Invalid query: ' . mysql_error());
+		}
+		$result2 = mysql_query("COMMIT");
+
+		if ($result == 1) {
+			//echo 'success!';
+		}
+		if ($result2 != 1) {
+			die('Invalid commit: ' . mysql_error());
+		}
+	}
 }
 
 ?>
