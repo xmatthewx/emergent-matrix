@@ -30,6 +30,6 @@
     	);
     }
     
-    echo json_encode($data);
+    $data_js= json_encode($data);
 
 ?>
