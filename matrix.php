@@ -6,7 +6,7 @@
 
 <script> 
     var uri = '<?php echo $uri ?>';
-    var data = JSON.parse('<?php echo $js_data ?>');
+    var data = JSON.parse('<?php echo $data_js ?>');
     console.log(uri);  
     console.log(data);  
 
