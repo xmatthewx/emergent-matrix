@@ -10,8 +10,8 @@
     console.log(uri);  
     console.log(data);  
 
-    var cats = data.MATRIX_CATS.split(",")
-    var items = data.MATRIX_ITEMS.split(",")
+    var cats = data[0].MATRIX_CATS.split(",")
+    var items = data[0].MATRIX_ITEMS.split(",")
     console.log("items");
     console.log(items);
 
