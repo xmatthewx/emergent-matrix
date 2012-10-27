@@ -46,26 +46,6 @@ $(window).load(function () {
     <!-- magic happens here -->
     <div id="thecanvas" class="">
         
-        
-        <?php
-        
-           // foreach items 
-        
-        ?>
-        
-        <!-- 
-        <div id="i_'+ item.id +'" class="swarm i_'+item.id+' c'+ item.count +'" style="left:'+item.mean_x+'%; top:'+item.mean_y+'%;" >'
-                +'<header>'
-                    + item.content
-                +'</header>' 
-                +'<section class="details" >'
-                    +'<p>' + item.count +' inputs</p>'
-                +'</section>'
-                +'<span class="anchor"></span>'
-            +'</div>'
-        -->
-        
-        
     </div>
 
 
