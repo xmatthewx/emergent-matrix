@@ -33,4 +33,7 @@ include "config.php";
     
     $data_js= json_encode($data);
 
+    echo $data_js;
+
+
 ?>
