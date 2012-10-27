@@ -83,11 +83,12 @@ function insertItemData() {
 	$lastMatrixId=mysql_fetch_array(mysql_query("SELECT MAX(MATRIX_ID) FROM MATRIX"));
 	$matrixId=$lastMatrixId[0];
 	
+	$itemId = 0;
 	foreach ($matrixItems as $eachItem) {
 		
 		//fetch latest item id
-		$lastItemId=mysql_fetch_array(mysql_query("SELECT MAX(ITEM_ID) FROM ITEMS"));		
-		$itemId=$lastItemId[0]+1;
+		// $lastItemId=mysql_fetch_array(mysql_query("SELECT MAX(ITEM_ID) FROM ITEMS"));		
+		// $itemId=$lastItemId[0]+1;
 		
 		$sql_insert= "insert into ITEMS(ITEM_ID, MATRIX_ID, ITEM_CONTENT)
 		VALUES('$itemId','$matrixId','$eachItem')";
@@ -100,6 +101,7 @@ function insertItemData() {
 
 		if ($result == 1) {
 			//echo 'success!';
+			$itemId += 1;
 		}
 		if ($result2 != 1) {
 			die('Invalid commit: ' . mysql_error());

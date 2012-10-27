@@ -6,9 +6,13 @@
 
 <script> 
     var uri = '<?php echo $uri ?>';
-    var data = JSON.parse('<?php echo $data_js ?>');
     console.log(uri);  
+    var data = '<?php echo $data_js ?>';
     console.log(data);  
+    var data = JSON.parse('<?php echo $data_js ?>');
+    console.log(data);  
+    console.log(data[0]);  
+    console.log(data[1]);  
 
     var cats = data[0].MATRIX_CATS.split(",")
     var items = data[0].MATRIX_ITEMS.split(",")
