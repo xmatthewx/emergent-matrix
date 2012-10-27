@@ -8,27 +8,24 @@
     var uri = '<?php echo $uri ?>';
     console.log(uri);  
     var data = '<?php echo $data_js ?>';
-    console.log(data);  
     var data = JSON.parse('<?php echo $data_js ?>');
     console.log(data);  
-    console.log(data[0]);  
-    console.log(data[1]);  
 
     var cats = data[0].MATRIX_CATS.split(",")
-    var items = data[0].MATRIX_ITEMS.split(",")
-    console.log("items");
-    console.log(items);
 
     itemslist = [];
-    for ( i=0; i < items.length; i++ ) {
+    for ( i=0; i < data.length; i++ ) {
+
         itemslist.push( {
-              id:i,
-              content:items[i],
-              mean_x:50,
-              mean_y:50,
-              count:0
+            key:data[i].ID,
+            id:data[i].ITEM_ID,
+            content:data[i].ITEM_CONTENT,
+            mean_x:data[i].ITEM_MEAN_X,
+            mean_y:data[i].ITEM_MEAN_Y,
+            count:data[i].ITEM_COUNT
         })
     }
+    console.log(itemslist);    
     itemslist = JSON.stringify(itemslist);
     localStorage.setItem(uri,itemslist);
 

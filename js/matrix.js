@@ -99,7 +99,7 @@ function render(i,pop){
 
         item = itemslist[i];
         // console.log(i);
-        
+
         // write emergent item
         $('#thecanvas').append( 
             '<div id="i_'+ item.id +'" class="swarm i_'+item.id+' c'+ item.count +'" style="left:'+item.mean_x+'%; top:'+item.mean_y+'%;" >'
@@ -300,7 +300,9 @@ function saveIteration(item){
   //  y = $(elem).css('top');
     
     var JSONObject = new Object;
-    
+
+
+    JSONObject.ID=item.key;
     JSONObject.ITEM_ID=item.id;
     JSONObject.ITEM_X=item.user_x;
     JSONObject.ITEM_Y=item.user_y;
@@ -344,7 +346,7 @@ function runAjax(JSONstring)
     // this is not native JS function!
     request = getHTTPObject();
     request.onreadystatechange = sendData;
-    request.open("GET", "php/setData.php?json="+JSONstring, true);
+    request.open("GET", "php/setData_Test.php?json="+JSONstring, true);
     request.send(null);
 }
 
