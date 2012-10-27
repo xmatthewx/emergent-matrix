@@ -15,7 +15,7 @@
     //Joint Query of ITEMS AND MATRIX TABLE to fetch all the required,relevant data in one query
     $result = mysql_query("SELECT ITEMS.ID,ITEMS.ITEM_ID,ITEMS.ITEM_CONTENT,ITEMS.ITEM_MEAN_X,ITEMS.ITEM_MEAN_Y,ITEMS.ITEM_COUNT,MATRIX.MATRIX_ID,MATRIX.MATRIX_URI,MATRIX.MATRIX_CATS,MATRIX.MATRIX_ITEMS,MATRIX.MATRIX_TITLE FROM ITEMS,MATRIX WHERE ITEMS.MATRIX_ID=MATRIX.MATRIX_ID AND MATRIX.MATRIX_URI='$uri'");
     while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-    	$data= array(
+    	$data[]= array(
     			'ID'=>$row['ID'],
     			'ITEM_ID'=>$row['ITEM_ID'],
     			'ITEM_CONTENT'=>$row['ITEM_CONTENT'],
