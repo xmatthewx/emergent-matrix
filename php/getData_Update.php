@@ -1,5 +1,5 @@
 <?php 
-include "config.php";
+
   // grab uri
     $uri = $_GET['id']; // written to JS console below
 
