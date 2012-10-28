@@ -1,7 +1,11 @@
 <?php 
 
   // grab uri
-    $uri = $_GET['id']; // written to JS console below
+  $uri = $_GET['id']; // written to JS console below
+  $update = $_GET['update']; // true if sent via ajax api
+
+  if( $update == 'true' ) { include "config.php"; }
+
 
     // load data
     $data = array();

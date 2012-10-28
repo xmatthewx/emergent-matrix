@@ -1,14 +1,16 @@
 <?php 
-include "config.php";
     // does URL have /?uri
     if(empty( $_GET['id'] )) {
-        echo '<div class="alert"><strong>Hello</strong>. Make your <a href="" >own matrix</a> or visit one of the others.</div>';
+        echo '<div class="alert"><strong>Hello</strong>. Make your <a href="new.html" >own matrix</a> or visit one of the others.</div>';
         include('php/footer.php');
         die();        
     }
 
-    // grab uri
-    $uri = $_GET['id']; // written to JS console below
+    // grab vars
+    $uri = $_GET['id']; // matrix uri
+    $update = $_GET['update']; // true if sent via ajax api
+
+    if( $update == 'true' ) { include "config.php"; }
 
     // load data
     $data = array();
@@ -31,6 +33,11 @@ include "config.php";
     	);
     }
     
-    $data_js= json_encode($data);
+    if ( $update == 'true' ) {
+        echo json_encode($data); // return ajax
+    }
+    else {  
+        $data_js= json_encode($data); // init data
+    }
 
 ?>

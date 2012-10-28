@@ -390,7 +390,7 @@ function sendData()
  	    	 $.ajax({
  	    	        // url: "/emergent-matrix/php/getData.php",
  	    	        // uhh, fix this url:
- 	    	        url: server_root + 'php/getData_Update.php?id=' + uri,
+ 	    	        url: server_root + 'php/getData.php?update=true&id=' + uri,
  	    	        async: true,
  	    	        dataType: 'json',
  	    	        success: function(data) {

@@ -1,6 +1,6 @@
 <?php
     include('php/header.php');
-    include('php/getData_Initial.php');
+    include('php/getData.php');
 ?>
 
 <script> 
