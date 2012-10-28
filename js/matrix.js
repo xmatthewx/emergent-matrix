@@ -409,7 +409,7 @@ function sendData()
                             // refreshit
                             // console.log('refresh data');            
                             refreshData(data); 
-                            console.log(data);                           
+                            // console.log(data);                           
                         };
 
  	    	        } // END success

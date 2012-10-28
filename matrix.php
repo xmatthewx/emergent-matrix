@@ -8,7 +8,7 @@
     console.log(uri);  
     var data = '<?php echo $data_js ?>';
     var data = JSON.parse('<?php echo $data_js ?>');
-    console.log(data);  
+    // console.log(data);  
 
     var title = data[0].MATRIX_TITLE;
     var cats = data[0].MATRIX_CATS.split(",");
@@ -25,7 +25,7 @@
             count:data[i].ITEM_COUNT
         })
     }
-    console.log(itemslist);    
+    // console.log(itemslist);    
     itemslist = JSON.stringify(itemslist);
     localStorage.setItem(uri,itemslist);
 
@@ -34,9 +34,9 @@ $(window).load(function () {
     $('h1').text(title);
     $('.container').append('<div id="north" class="label" >north</div><div id="east" class="label" >east</div><div id="south" class="label" >south</div><div id="west" class="label" >west</div>');
     $('#north').text(cats[0]);
-    $('#east').text(cats[3]);
     $('#south').text(cats[1]);
     $('#west').text(cats[2]);
+    $('#east').text(cats[3]);
     responsive();
         
 });

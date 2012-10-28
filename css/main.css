@@ -183,7 +183,7 @@ span.anchor, #thecanvas div span {
     -moz-border-radius: 4px;
     border-radius: 4px;
     background:rgba(178,204,204,0.9);
-    background:rgba(0,0,0,0.5);
+    background:rgba(0,0,0,0.6);
 }
 #info button { color:white; opacity:0.8; }
 #info button:hover { color:white; opacity:1; }
@@ -235,7 +235,7 @@ body, #thecanvas {
 
 #thecanvas {
     position:absolute;
-    top:0;
+    top:0; left:0;
     width:100%;
 }
 .container { width:100%; }
