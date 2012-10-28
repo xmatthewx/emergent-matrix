@@ -2,6 +2,26 @@ $(window).load(function () {
 // all JS inside $(window).load
 console.log('loaded');
 
+function responsive(){
+    width = $(window).width(); 
+    height = $(window).height();
+    // position labels 
+    n_offset = width/2 - $('#north').outerWidth() / 2;
+    $('#north').css( 'left', n_offset);
+    s_offset = width/2 - $('#south').outerWidth() / 2;
+    $('#south').css( 'left', s_offset);
+    e_offset = height/2 - $('#east').outerHeight() / 2;
+    $('#east').css( 'top', e_offset);
+    w_offset = height/2 - $('#west').outerHeight() / 2;
+    $('#west').css( 'top', w_offset);
+    form_height = height - 130;
+    $('form').css('height', form_height);
+    $('form').append('<div class="mask"></div>');
+}
+responsive();
+$(window).resize(function() {
+    responsive();
+});
 
 /***
  * uri check
@@ -58,13 +78,46 @@ function check_uri() {
 };
 
 
+/***
+ * categories
+ 
+ // rotation on east/west yields wrong measurement for right/left placement as text lengthens
+ 
+$('#matrix_north').keyup( function(){
+    $('#north').text( $('#matrix_north').val() ); 
+   // responsive();
+});
+$('#matrix_south').keyup( function(){
+    $('#south').text( $('#matrix_south').val() ); 
+    responsive();
+});
+$('#matrix_east').keyup( function(){
+    $('#east').html( $('#matrix_east').val() ); 
+    // e_right = -e_offset/2 + $('#east').outerWidth();
+    $('#east').css( 'right', e_right);
+   responsive();
+});
+$('#matrix_west').keyup( function(){
+    $('#west').text( $('#matrix_west').val() ); 
+    responsive();
+});
+*/
+
 
 /***
  * item fields
  */
  
 // trigger more input for items as needed
-$('#item_3').focus( function(){ xitem(); });
+// $('#item_3').focus( function(){ xitem(); });
+
+
+$('#more_items').click( function(){
+    console.log('more');
+    xitem();
+    //return false;
+});
+$('#more_items').tooltip();
 
 function xitem(){ 
     // clone the last item input field
@@ -79,10 +132,14 @@ function xitem(){
  
     	$("section#items").append(template);    
 
-    	$('#item_' + n).focus( function(){ xitem(); }); 	    
+    	// $('#item_' + n).focus( function(){ xitem(); }); 	    
  	}
+ 	else { 
+ 	    $('#more_items').text('max reached');
+ 	    $('#more_items').attr('disabled', 'disabled');
+ 	 }
     
-    $('#item_' + i ).unbind('focus'); // trigger from each only once
+    // $('#item_' + i ).unbind('focus'); // trigger from each only once
     
 };
 

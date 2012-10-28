@@ -17,7 +17,7 @@
         <script src="js/vendor/modernizr-2.6.1.min.js"></script>
         
     </head>
-    <body>
+    <body class="newform">
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
@@ -33,7 +33,8 @@
 
 
         <div class="container">
-            <h1 style="">Create!</h1>
+            <div id="north" class="label" >top</div><div id="east" class="label" >right</div><div id="south" class="label" >bottom</div><div id="west" class="label" >left</div>
+            
             <form class="form-horizontal" action="php/newMatrix.php" method="post" >
                 
                 <div class="control-group">
@@ -41,7 +42,7 @@
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">&#187;</span>
-                            <input name="MATRIX_TITLE" id="matrix_title" size="16" type="text" placeholder="The title">
+                            <input name="MATRIX_TITLE" id="matrix_title" type="text" placeholder="The title">
                         </div>
                     </div>
                 </div>
@@ -59,40 +60,39 @@
 
                 <section id="categories">
                     
-                    <div class="control-group">
+                    <div class="control-group category">
                         <label class="control-label" for="matrix_north">Categories</label>
                         <div class="controls">
                             <div class="input-prepend">
-                                <span class="add-on">1</span>
+                                <span class="add-on">Top</span>
                                 <input type="text" name="MATRIX_CATS[]" id="matrix_north" placeholder="north">
                             </div>
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div class="control-group category">
                         <div class="controls">
                             <div class="input-prepend">
-                                <span class="add-on">2</span>
-                                <input type="text" name="MATRIX_CATS[]" id="matrix_east" placeholder="east">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="controls">
-                            <div class="input-prepend">
-                                <span class="add-on">3</span>
+                                <span class="add-on">Bottom</span>
                                 <input type="text" name="MATRIX_CATS[]" id="matrix_south" placeholder="south">
                             </div>
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div class="control-group category">
                         <div class="controls">
                             <div class="input-prepend">
-                                <span class="add-on">4</span>
+                                <span class="add-on">Left</span>
                                 <input type="text" name="MATRIX_CATS[]" id="matrix_west" placeholder="west">
                             </div>
                         </div>
                     </div>
-                    
+                    <div class="control-group category">
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">Right</span>
+                                <input type="text" name="MATRIX_CATS[]" id="matrix_east" placeholder="east">
+                            </div>
+                        </div>
+                    </div>                    
                 </section>
                 
                 <section id="items">
@@ -127,6 +127,12 @@
 
                 <div class="control-group">
                     <div class="controls">
+                        <a id="more_items" class="btn" rel="tooltip" title="Up to 15 Items" >+ Item</a>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
                         <span class="help-block">Unlock this puzzle to help us avoid junk:</span>
                         <label class="checkbox inline" for="test1" >
                           <input type="checkbox" id="test1" value="option1"> Check
@@ -153,7 +159,6 @@
             <div id="thecanvas" class="">
                       
             </div>
-
         </div> <!-- /container -->
 
 
