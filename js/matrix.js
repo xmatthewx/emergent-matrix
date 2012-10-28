@@ -1,3 +1,9 @@
+var itemslist = [];
+var drag_active = false;
+var first_drag = true;
+var first_visit = true;
+var width;
+var height;
 
 clearlocal = false; // clear once to clean local data and load a new list.
     if (clearlocal) { localStorage.clear(); }
@@ -18,6 +24,7 @@ function responsive(){
     $('#east').css( 'top', e_offset);
     w_offset = height/2 - $('#west').outerHeight() / 2;
     $('#west').css( 'top', w_offset);
+    $('#thecanvas').css('height',height);
 }
 // on load and browser resize
 responsive();
@@ -33,8 +40,8 @@ var refreshInterval = setInterval(getData, 5*1000);//5 seconds
 /***
  * responsize window size
  */
-var width = $(window).width(); 
-var height = $(window).height();
+width = $(window).width(); 
+height = $(window).height();
 
 $(window).resize(function() {
     responsive();
@@ -47,10 +54,6 @@ $(window).resize(function() {
 /***
  * init itemslist
  */
-var itemslist = [];
-var drag_active = false;
-var first_drag = true;
-var first_visit = true;
 
 // load locally if available
 if ( !localStorage.getItem(uri) ) { 
@@ -64,7 +67,6 @@ else {
     itemslist = JSON.parse(itemslist);
     console.log(itemslist); // console let's you view contents
     pre_render('all'); // draw from local
-    first_visit = false;
 }
 
 
@@ -156,8 +158,8 @@ function render(i,pop){
     /***
      * drag events
      */
-    $('#thecanvas div.swarm').draggable();
-    $('#thecanvas div.user').draggable();
+    $('#thecanvas div.swarm').draggable( {containment: "parent"} );
+    $('#thecanvas div.user').draggable( {containment: "parent"} );
 
     $('#thecanvas div').bind( "dragstart", function(event, ui) {                
         drag_active = true;
@@ -212,7 +214,7 @@ function render(i,pop){
     if(pop == 'pop') {
         $('div.i_'+item.id+'.swarm2').css('opacity','1.0').css('zIndex',11);
         $('div.i_'+item.id+'.swarm2').children('.details').delay(200).fadeIn().delay(2000).fadeOut().delay(1000);
-        $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.25 }, 1000).delay(2000).animate({'z-index':1},0); 
+            $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.25 }, 1000).delay(2000).animate({'z-index':5},0); 
         $('div.i_'+item.id+'.user').delay(3000).animate({'z-index':11},0); // jQuery sux at pairing z-index & delays
     }
 
@@ -233,9 +235,9 @@ function updateitem(elem){
     mean_y = item.mean_y;
     
     // find and update user coordinates
-
-    x_px = Math.round (Number( $(elem).css('left').slice(0,-2) ));
-    y_px = Math.round (Number( $(elem).css('top').slice(0,-2) ));
+    var offset = $(elem).offset();
+    x_px = offset.left;
+    y_px = offset.top;
 
     user_x = item.user_x = x_px / width * 100;
     user_y = item.user_y = y_px / height * 100;
@@ -252,8 +254,10 @@ function updateitem(elem){
 
     /* // prompt on first visit  */
     if ( first_drag && first_visit ){ 
+        drag_active = true;
         showinfo(id); 
         first_drag = false; 
+        pre_render(item.id,'pop'); 
     }
     else { 
         first_drag = false; 
@@ -262,26 +266,24 @@ function updateitem(elem){
 
 //  pre_render(item.id,'pop'); 
     saveIteration(item);//Send data to php for insert
-    
+
 } // END updateitem()
 
 // prompt on first visit
 function showinfo(id){
     
-    drag_active = true;
-
-    console.log('showinfo' + ' dragactive: ' + drag_active );
+    // console.log('showinfo' + ' dragactive: ' + drag_active );
 
     $('#info').show();
-    $('#info').css('zIndex','102');
+    $('#info').css('zIndex','4');
     $('html').click( function(){ 
         $('#info').fadeOut(); 
         drag_active = false;
-        pre_render(id,'pop');
+        //pre_render(id,'pop');
     });
     $('#info button').click( function(){ 
         drag_active = false;
-        pre_render(id,'pop');
+        //pre_render(id,'pop');
      });
     
 };
@@ -311,7 +313,7 @@ function saveIteration(item){
     JSONstring = JSON.stringify(JSONObject);
     runAjax(JSONstring);
     
-    console.log(''+JSONstring);
+    // console.log(''+JSONstring);
   }
 
 function getHTTPObject()
@@ -506,36 +508,7 @@ $('#thecanvas li a.icon-trash').click( function(){
 */
 
 
-/***
- * dummy itemlist
- */
-/* ready to delete?
-function initItems(){
-    // add to itemslist
 
-    addlist = [];
-    console.log(addlist);
-    xi = 100 / ( newlist.length * 2);
-    xx = xi * 4; 
-
-    for ( n=0; n < newlist.length; n++ ){
-
-        addlist.push( {
-            id:n,
-            content:newlist[n],
-            mean_x:50,
-            mean_y:50,
-            count:0
-            } );
-        console.log(addlist);
-        xx += xi;
-        
-    }
-    
-    itemslist = itemslist.concat(addlist);
-    
-};
-*/
 
 
 

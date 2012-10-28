@@ -128,7 +128,7 @@ function xitem(){
  	if( n < 16 ){
 
     	template.find(".add-on").text(n);
-    	template.find("input").attr('id','item_'+ n).attr('name','MATRIX_ITEMS[]');
+    	template.find("input").attr('id','item_'+ n).val('');
  
     	$("section#items").append(template);    
 
