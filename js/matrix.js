@@ -480,6 +480,35 @@ function refreshData(data){
 
 
 /***
+ * get iterations!
+ */
+
+// call after save success
+// getIterations(JSONObject.ID); 
+
+function getIterations(item) {
+    if( !drag_active && !first_drag ) {  // don't disrupt user drag
+           console.log('get iterations');            
+	    	 $.ajax({
+	    	        // url: "/emergent-matrix/php/getData.php",
+	    	        // uhh, fix this url:
+	    	        url: server_root + 'php/getIterations.php?id=' + uri + '&item=' + item,
+	    	        async: true,
+	    	        dataType: 'json',
+	    	        success: function(data) {
+                       console.log('got iterations');
+                       console.log(data);
+
+	    	        } // END success
+	    	    });
+	    }
+}
+
+
+
+
+
+/***
  * delete
  */
 $('#thecanvas li a.icon-trash').click( function(){
