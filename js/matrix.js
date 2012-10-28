@@ -56,6 +56,7 @@ var first_visit = true;
 if ( !localStorage.getItem(uri) ) { 
     console.log("no stored items"); 
     // initItems();
+    // this should never happen. writing to local storage on initial load. 
     getData(); // grab data from server on first load. 
 }
 else {
@@ -70,9 +71,9 @@ else {
 /***
  * store itemslist
  */
-function storelist() {
+function storelist() {    
     theitems = JSON.stringify(itemslist);
-    localStorage.itemslist = theitems;
+    localStorage.setItem(uri,theitems);
     // console.log("stored local: " +localStorage.itemslist);
 }
 
@@ -385,24 +386,28 @@ function sendData()
      // console.log('getData. active: ' + !first_drag);
 
      if( !drag_active && !first_drag ) {  // don't update during user drag
-            console.log('get data');            
+            // console.log('get data');            
  	    	 $.ajax({
  	    	        // url: "/emergent-matrix/php/getData.php",
  	    	        // uhh, fix this url:
- 	    	        url: server_root + 'php/getData_Update.php',
+ 	    	        url: server_root + 'php/getData_Update.php?id=' + uri,
  	    	        async: true,
  	    	        dataType: 'json',
  	    	        success: function(data) {
-                        console.log('ajax success');
-   
-                        if ( !localStorage.getItem('itemslist') ) { 
+                        // console.log('ajax success');
+      
+                        if ( !localStorage.getItem(uri) ) { 
                             // init it
+                            // this will never happen. we are now writing to localStorage on initial load
+                            console.log('init data');            
                             initData(data);
                             }
    
                         else {
                             // refreshit
-                            refreshData(data);                            
+                            // console.log('refresh data');            
+                            refreshData(data); 
+                            console.log(data);                           
                         };
 
  	    	        } // END success
@@ -447,12 +452,16 @@ function refreshData(data){
          theid = value.ITEM_ID;
 
           // update stuff
+          // must include ID and ITEM_ID
+          // key = value.ID ??
+          
         item = itemslist[theid];
         item.mean_x = value.ITEM_MEAN_X;
         item.mean_y = value.ITEM_MEAN_Y;
         item.count = value.ITEM_COUNT;
         item.content = value.ITEM_CONTENT;
         item.id = value.ITEM_ID;
+
 
         //  console.log(item.user_x);
 
