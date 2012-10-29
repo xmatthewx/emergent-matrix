@@ -37,7 +37,7 @@ else {
     insertMatrixData($matrixData);
     
     //If matrix data and item data have been inserted successfully, redirect to following url
-    header("Location: http://www.ideapublic.org/matrix/matrix.php?id=".$matrixData[matrixUri]); /* Redirect browser */
+    header("Location: http://www.ideapublic.org/matrix/?id=".$matrixData[matrixUri]); /* Redirect browser */
 }
 
 

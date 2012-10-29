@@ -225,6 +225,7 @@ span.anchor, #thecanvas div span {
     -moz-border-radius: 4px;
     border-radius: 4px;
     border:1px solid rgba(0,0,0,0.5);
+    background:rgba(0,0,0,0.2);
     z-index:0; 
     opacity:0.6;    
 }  
@@ -285,7 +286,7 @@ form .mask {
     bottom:45px; /* height + form padding */
     height:30px; 
     margin:0 -19px; width:538px;
-    background:rgba(255,255,255,0.5);
+    background:rgba(255,255,255,0.4);
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;

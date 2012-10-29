@@ -46,12 +46,13 @@ function check_uri() {
      console.log('checking: ' + new_uri);
      
      // sanitized?
-     sanitized = new_uri.search(/[^a-z 0-9 \-]/gi); // -1 = clean
+     sanitized = new_uri.search(/[^a-z0-9\-]/gi); // -1 = clean
      if ( sanitized != -1 ) { 
          console.log('uri illegal');
          $('.alert').remove(); // remove pre-existing alerts
          $('#matrix_uri').css('color','red').css('fontWeight','bold'); 
          $('#matrix_uri').parents('.control-group').prepend('<div class="alert">Oops! Only numbers, letters, and dashes (-) allowed.</div>');
+         $('form').scrollTop(0);
          $('.alert').hide().slideDown(400); // remove pre-existing alerts
          return false;
          }
@@ -70,6 +71,7 @@ function check_uri() {
               $('.alert').remove(); // remove pre-existing alerts
               $('#matrix_uri').css('color','red').css('fontWeight','bold'); 
               $('#matrix_uri').parents('.control-group').prepend('<div class="alert">Oh snap! That URL is already taken. Please try another.</div>');
+              $('form').scrollTop(0);
               $('.alert').hide().slideDown(400); // remove pre-existing alerts
           }
         
@@ -80,7 +82,7 @@ function check_uri() {
 
 /***
  * categories
- 
+ // rename labels while filling out form
  // rotation on east/west yields wrong measurement for right/left placement as text lengthens
  
 $('#matrix_north').keyup( function(){
@@ -148,6 +150,8 @@ function xitem(){
  * unlock submit. uri ok and spam test.
  */
 $('.checkbox').change( function(){ 
+    check_uri();
+    
     // block spam
     if( $('#test1:checked').val() && !$('#test2:checked').val()  && $('#test3:checked').val()  ){
         console.log('unlocked');
