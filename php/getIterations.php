@@ -1,4 +1,6 @@
 <?php 
+    header('Access-Control-Allow-Origin: *');
+
     // does URL have /?uri
     if(empty( $_GET['id'] )) {
         die();        

@@ -177,8 +177,8 @@ function render(i,pop){
         // launch operation sparkles
         // this seems to be triggered 5 or 6 times on a single interaction       
         id = Number(this.id.slice(2));
+        sparkles = []; // could check id in getting_iterations before dumping
         getIterations(itemslist[id].key); 
-        sparkles = [];
         $('.sparkle').remove(); // remove any previous
         
     });
@@ -500,14 +500,14 @@ function refreshData(data){
 
 function getIterations(id) {
     if( !getting_iterations ) {  // don't repeat yourself
-        getting_iterations = true;
-        console.log('launch operation sparkles for: ' + id);
+        getting_iterations = id;
+        // console.log('launch operation sparkles for: ' + id);
 	    	 $.ajax({
 	    	        url: server_root + 'php/getIterations.php?id=' + id,
 	    	        async: true,
 	    	        dataType: 'json',
 	    	        success: function(data) {
-                       console.log('got iterations');
+                       // console.log('got iterations');
                        // console.log(data);
                        
                        // renderSparkles(data); // render here during drag
@@ -519,6 +519,8 @@ function getIterations(id) {
 }
 
 function renderSparkles(data) {
+    
+    if( !data ) { data = [] };
     
     $.each(data, function(key, value){ 
         x = value.ITEM_X;
