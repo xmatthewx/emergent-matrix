@@ -29,12 +29,26 @@ function responsive(){
 // on load and browser resize
 responsive();
 
+
+
+
 $(window).load(function () {
-// all JS inside $(window).load
-
-
-// periodically get DB data
-var refreshInterval = setInterval(getData, 10*1000); // seconds
+    // all JS inside $(window).load
+    
+    // periodically get DB data
+    var refreshInterval = setInterval(getData, 10*1000); // seconds
+    
+    
+    // set title and categories
+    var title = data[0].MATRIX_TITLE;
+    var cats = data[0].MATRIX_CATS.split(",");
+    $('h1').text(title);
+    $('.container').append('<div id="north" class="label" >north</div><div id="east" class="label" >east</div><div id="south" class="label" >south</div><div id="west" class="label" >west</div>');
+    $('#north').text(cats[0]);
+    $('#south').text(cats[1]);
+    $('#west').text(cats[2]);
+    $('#east').text(cats[3]);
+    responsive();
 
 
 /***
@@ -56,11 +70,32 @@ $(window).resize(function() {
 // load locally if available
 if ( !localStorage.getItem(uri) ) { 
     console.log("no stored items"); 
-    // initItems();
-    // this should never happen. writing to local storage on initial load. 
-    getData(); // grab data from server on first load. 
+    
+    itemslist = [];
+    for ( i=0; i < data.length; i++ ) {
+
+        itemslist.push( {
+            key:data[i].ID,
+            id:data[i].ITEM_ID,
+            content:data[i].ITEM_CONTENT,
+            mean_x:data[i].ITEM_MEAN_X,
+            mean_y:data[i].ITEM_MEAN_Y,
+            count:data[i].ITEM_COUNT
+        })
+    }
+    // console.log(itemslist);    
+    itemslist = JSON.stringify(itemslist);
+    localStorage.setItem(uri,itemslist);
+
+    itemslist = JSON.parse(itemslist);
+    console.log(itemslist); // console let's you view contents
+    pre_render('all'); // draw from local
+    
 }
 else {
+    console.log("loaded from storage"); 
+    first_visit = false;
+
     itemslist = localStorage.getItem(uri);
     itemslist = JSON.parse(itemslist);
     console.log(itemslist); // console let's you view contents
