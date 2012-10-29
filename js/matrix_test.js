@@ -29,26 +29,26 @@ function responsive(){
 // on load and browser resize
 responsive();
 
-
-
-
 $(window).load(function () {
-    // all JS inside $(window).load
-    
-    // periodically get DB data
-    var refreshInterval = setInterval(getData, 10*1000); // seconds
-    
-    
-    // set title and categories
-    var title = data[0].MATRIX_TITLE;
-    var cats = data[0].MATRIX_CATS.split(",");
-    $('h1').text(title);
-    $('.container').append('<div id="north" class="label" >north</div><div id="east" class="label" >east</div><div id="south" class="label" >south</div><div id="west" class="label" >west</div>');
-    $('#north').text(cats[0]);
-    $('#south').text(cats[1]);
-    $('#west').text(cats[2]);
-    $('#east').text(cats[3]);
-    responsive();
+// all JS inside $(window).load
+
+
+// periodically get DB data
+var refreshInterval = setInterval(getData, 10*1000); // seconds
+
+
+/***
+ * set title and categories
+ */
+var title = data[0].MATRIX_TITLE;
+var cats = data[0].MATRIX_CATS.split(",");
+$('h1').text(title);
+$('.container').append('<div id="north" class="label" >north</div><div id="east" class="label" >east</div><div id="south" class="label" >south</div><div id="west" class="label" >west</div>');
+$('#north').text(cats[0]);
+$('#south').text(cats[1]);
+$('#west').text(cats[2]);
+$('#east').text(cats[3]);
+responsive();
 
 
 /***
@@ -71,6 +71,7 @@ $(window).resize(function() {
 if ( !localStorage.getItem(uri) ) { 
     console.log("no stored items"); 
     
+    // load data from php
     itemslist = [];
     for ( i=0; i < data.length; i++ ) {
 
@@ -90,7 +91,7 @@ if ( !localStorage.getItem(uri) ) {
     itemslist = JSON.parse(itemslist);
     console.log(itemslist); // console let's you view contents
     pre_render('all'); // draw from local
-    
+
 }
 else {
     console.log("loaded from storage"); 

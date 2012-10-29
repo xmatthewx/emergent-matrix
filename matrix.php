@@ -1,22 +1,20 @@
 <?php
     //
-    //
     // test experimental features in matrix.php
     // use index.php for live users
-    // URIs will work on either file
-    //
     //
     // test: http://www.ideapublic.org/matrix/matrix.php?id=testing
+    // test: matrix_test.js
     //
-    // uses: matrix_test.js
-    // instead of: matrix.js
+    // live: http://www.ideapublic.org/matrix/?id=testing
+    // live: matrix.js
     //
     //
-    //
-    // to migrate matrix.php to index.php
-    // replace inline header.php
-    // with include('php/header.php');
-    // see below
+    // to migrate:
+    // - copy matrix.php to index.php
+    // - replace inline header
+    // - with include('php/header.php');
+    // - see below
     //
     //
     //
@@ -72,7 +70,8 @@ include "php/config.php"; ?>
 <?php
     //
     // end header.php
-    //
+    // delete everything above
+    // uncomment include header.php below
     //
 ?>
 <?php
@@ -85,8 +84,7 @@ include "php/config.php"; ?>
     console.log(uri);  
     var data = '<?php echo $data_js ?>';
     var data = JSON.parse('<?php echo $data_js ?>');
-    // console.log(data);  
-
+    // console.log(data); 
 </script>
 
     <h1><?php echo $uri; ?></h1>
