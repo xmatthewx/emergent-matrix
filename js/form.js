@@ -23,6 +23,10 @@ $(window).resize(function() {
     responsive();
 });
 
+// enable tooltips
+$('a').tooltip();
+
+
 /***
  * uri check
  */
@@ -43,67 +47,57 @@ $('#matrix_uri').blur( function() {
 function check_uri() {
     
      new_uri = $('#matrix_uri').val();
-     console.log('checking: ' + new_uri);
+     var msg; var error;
      
+     // blank?
+     if ( new_uri === '' ) {
+         error = 'uri is blank';
+         msg = 'Sorry. A unique URL is required.';
+         uri_bad(error,msg);
+         return false;
+        }
+
      // sanitized?
      sanitized = new_uri.search(/[^a-z0-9\-]/gi); // -1 = clean
      if ( sanitized != -1 ) { 
-         console.log('uri illegal');
-         $('.alert').remove(); // remove pre-existing alerts
-         $('#matrix_uri').css('color','red').css('fontWeight','bold'); 
-         $('#matrix_uri').parents('.control-group').prepend('<div class="alert">Oops! Only numbers, letters, and dashes (-) allowed.</div>');
-         $('form').scrollTop(0);
-         $('.alert').hide().slideDown(400); // remove pre-existing alerts
+         error = 'uri has illegal characters';
+         msg = 'Oops! Only numbers, letters, and dashes (-) allowed. No spaces.';
+         uri_bad(error,msg);
          return false;
-         }
+         } 
+         
+    console.log('uri is good. is it unique?');
 
     // uri unique? 
      $.post('php/checkMatrixURI.php',{new_uri:new_uri},function(data) {
-         console.log(data);
+         // console.log(data);
           if ( data != 1 ) { 
               console.log('uri is unique');
               $('#matrix_uri').css('color','green').css('fontWeight','bold'); 
               $('.alert').addClass('alert-success').text('Perfecto!').delay(2000).fadeOut('slow');
               uri_ok = true;
+              unlock_submit();
           }
           else { 
-              console.log('uri is taken');
-              $('.alert').remove(); // remove pre-existing alerts
-              $('#matrix_uri').css('color','red').css('fontWeight','bold'); 
-              $('#matrix_uri').parents('.control-group').prepend('<div class="alert">Oh snap! That URL is already taken. Please try another.</div>');
-              $('form').scrollTop(0);
-              $('.alert').hide().slideDown(400); // remove pre-existing alerts
+              error = 'uri is taken';
+              msg = 'Oh snap! That URL is already taken. Please try another.';
+              uri_bad(error,msg);
+              return false;
           }
-        
         },'json');
 
 };
 
-
-/***
- * categories
- // rename labels while filling out form
- // rotation on east/west yields wrong measurement for right/left placement as text lengthens
- 
-$('#matrix_north').keyup( function(){
-    $('#north').text( $('#matrix_north').val() ); 
-   // responsive();
-});
-$('#matrix_south').keyup( function(){
-    $('#south').text( $('#matrix_south').val() ); 
-    responsive();
-});
-$('#matrix_east').keyup( function(){
-    $('#east').html( $('#matrix_east').val() ); 
-    // e_right = -e_offset/2 + $('#east').outerWidth();
-    $('#east').css( 'right', e_right);
-   responsive();
-});
-$('#matrix_west').keyup( function(){
-    $('#west').text( $('#matrix_west').val() ); 
-    responsive();
-});
-*/
+function uri_bad(error,msg) {
+    console.log(error);
+    uri_ok = false;
+    $('.alert').remove(); // remove pre-existing alerts
+    $('form').scrollTop(0);
+    $('#matrix_uri').css('color','red').css('fontWeight','bold'); 
+    $('#matrix_uri').parents('.control-group').prepend('<div class="alert">'+msg+'</div>');         
+    $('.alert').hide().slideDown(400); // reveal alert
+    $('form button').attr('disabled', 'disabled');
+}
 
 
 /***
@@ -119,7 +113,6 @@ $('#more_items').click( function(){
     xitem();
     //return false;
 });
-$('#more_items').tooltip();
 
 function xitem(){ 
     // clone the last item input field
@@ -146,20 +139,58 @@ function xitem(){
 };
 
 
+$('#less_items').click( function(){
+    console.log('less');
+
+    $("section#items .control-group").last().remove();
+
+});
+
+
 /***
  * unlock submit. uri ok and spam test.
  */
 $('.checkbox').change( function(){ 
     check_uri();
-    
-    // block spam
+});
+
+function unlock_submit(){
     if( $('#test1:checked').val() && !$('#test2:checked').val()  && $('#test3:checked').val()  ){
         console.log('unlocked');
         if(uri_ok) {
             $('form button').removeAttr("disabled");
         }
     }
+    else {
+        $('form button').attr('disabled', 'disabled');
+    }
+}
+
+
+/***
+ * categories
+ * rename labels while filling out form
+ * problem: rotation on east/west yields wrong measurement for right/left placement as text lengthens
+ 
+$('#matrix_north').keyup( function(){
+    $('#north').text( $('#matrix_north').val() ); 
+   // responsive();
 });
+$('#matrix_south').keyup( function(){
+    $('#south').text( $('#matrix_south').val() ); 
+    responsive();
+});
+$('#matrix_east').keyup( function(){
+    $('#east').html( $('#matrix_east').val() ); 
+    // e_right = -e_offset/2 + $('#east').outerWidth();
+    $('#east').css( 'right', e_right);
+   responsive();
+});
+$('#matrix_west').keyup( function(){
+    $('#west').text( $('#matrix_west').val() ); 
+    responsive();
+});
+*/
 
 
 // END $(window).load
