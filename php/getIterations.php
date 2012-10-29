@@ -11,16 +11,13 @@
     // load data
     $data = array();
 
-    $result=mysql_query("SELECT ID, ITEM_ID, ITEM_X, ITEM_Y, ITEM_MEAN_X, ITEM_MEAN_Y FROM ITEM_ITERATIONS WHERE ID='$id'");
+    $result=mysql_query("SELECT ID, ITEM_X, ITEM_Y FROM ITEM_ITERATIONS WHERE ID='$id'");
 
     while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
     	$data[]= array(
     			'ID'=>$row['ID'],
-    			'ITEM_ID'=>$row['ITEM_ID'],
     			'ITEM_X'=>$row['ITEM_X'],
     			'ITEM_Y'=>$row['ITEM_Y'],
-    			'ITEM_MEAN_X'=>$row['ITEM_MEAN_X'],
-    			'ITEM_MEAN_Y' => $row['ITEM_MEAN_Y']
     	);
     }
     

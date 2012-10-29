@@ -2,6 +2,8 @@ var itemslist = [];
 var drag_active = false;
 var first_drag = true;
 var first_visit = true;
+var getting_iterations;
+var sparkles = [];
 var width;
 var height;
 
@@ -168,9 +170,16 @@ function render(i,pop){
         $(this).siblings().css('z-index','0');
         $(this).css('z-index','10');    
         $(this).css('box-shadow','1px 1px 7px rgba(0,0,0,0.2)');
-    
+
         // hide popout if showing
         $(this).children('.details').clearQueue().fadeOut();    
+
+        // launch operation sparkles
+        // this seems to be triggered 5 or 6 times on a single interaction       
+        id = Number(this.id.slice(2));
+        getIterations(itemslist[id].key); 
+        $('.sparkle').remove(); // remove any previous
+        
     });
 
     $('#thecanvas div').bind( "drag", function(event, ui) { 
@@ -179,7 +188,10 @@ function render(i,pop){
 
     $('#thecanvas div').bind( "dragstop", function(event, ui) {
         // update then save
-        if( drag_active ) { updateitem(this); }        
+        if( drag_active ) { 
+                updateitem(this); 
+                renderSparkles(sparkles);
+                }        
             drag_active = false; // prevent loops. don't put inside if statement. don't move to updateitem()
     });
 
@@ -213,7 +225,7 @@ function render(i,pop){
     // show popout after item update
     if(pop == 'pop') {
         $('div.i_'+item.id+'.swarm2').css('opacity','1.0').css('zIndex',11);
-        $('div.i_'+item.id+'.swarm2').children('.details').delay(200).fadeIn().delay(2000).fadeOut().delay(1000);
+        // display details on drop: $('div.i_'+item.id+'.swarm2').children('.details').delay(200).fadeIn().delay(2000).fadeOut().delay(1000);
             $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.25 }, 1000).delay(2000).animate({'z-index':5},0); 
         $('div.i_'+item.id+'.user').delay(3000).animate({'z-index':11},0); // jQuery sux at pairing z-index & delays
     }
@@ -303,7 +315,6 @@ function saveIteration(item){
   //  y = $(elem).css('top');
     
     var JSONObject = new Object;
-
 
     JSONObject.ID=item.key;
     JSONObject.ITEM_ID=item.id;
@@ -486,25 +497,46 @@ function refreshData(data){
 // call after save success
 // getIterations(JSONObject.ID); 
 
-function getIterations(item) {
-    if( !drag_active && !first_drag ) {  // don't disrupt user drag
-           console.log('get iterations');            
+function getIterations(id) {
+    if( !getting_iterations ) {  // don't repeat yourself
+        getting_iterations = true;
+        console.log('launch operation sparkles for: ' + id);
 	    	 $.ajax({
-	    	        // url: "/emergent-matrix/php/getData.php",
-	    	        // uhh, fix this url:
-	    	        url: server_root + 'php/getIterations.php?id=' + uri + '&item=' + item,
+	    	        url: server_root + 'php/getIterations.php?id=' + id,
 	    	        async: true,
 	    	        dataType: 'json',
 	    	        success: function(data) {
                        console.log('got iterations');
-                       console.log(data);
+                       // console.log(data);
+                       
+                       // renderSparkles(data); // render here during drag
+                       sparkles = data; // render later during dragstop
 
 	    	        } // END success
 	    	    });
 	    }
 }
 
+function renderSparkles(data) {
+    
+    $.each(data, function(key, value){ 
+        x = value.ITEM_X;
+        y = value.ITEM_Y;
+    	$('#thecanvas').append('<em class="sparkle" style="left:'+x+'%; top:'+y+'%;" ></>');    
+    	$('.sparkle').hide();
+    });
+    // console.log('sparkles rendered');
+    getting_iterations = false; // stop preventing loops
 
+    i = 1;
+    var timer = new Array();
+    jQuery('.sparkle').each(function($) {
+        i++;
+        var thiz = jQuery(this);
+        timer[i] = setTimeout(function() { thiz.fadeIn(300); }, i * 100);
+    })	
+	
+}
 
 
 
