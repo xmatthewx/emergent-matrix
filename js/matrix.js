@@ -36,7 +36,7 @@ $(window).load(function () {
 
 
 // periodically get DB data
-var refreshInterval = setInterval(getData, 5*1000);//5 seconds
+var refreshInterval = setInterval(getData, 10*1000); // seconds
 
 
 /***
@@ -178,6 +178,7 @@ function render(i,pop){
         // this seems to be triggered 5 or 6 times on a single interaction       
         id = Number(this.id.slice(2));
         getIterations(itemslist[id].key); 
+        sparkles = [];
         $('.sparkle').remove(); // remove any previous
         
     });
