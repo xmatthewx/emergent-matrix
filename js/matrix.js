@@ -24,13 +24,18 @@ function responsive(){
     $('#east').css( 'top', e_offset);
     w_offset = height/2 - $('#west').outerHeight() / 2;
     $('#west').css( 'top', w_offset);
-    $('#thecanvas').css('height',height);
+    $('#thecanvas').css('height',height);   
+
+    about_max = height - 60;
+    $('#about').css('maxHeight', about_max  );
+
 }
-// on load and browser resize
-responsive();
 
 $(window).load(function () {
 // all JS inside $(window).load
+
+// on load and browser resize
+responsive();
 
 
 // periodically get DB data
@@ -259,7 +264,7 @@ function render(i,pop){
     if(pop == 'pop') {
         $('div.i_'+item.id+'.swarm2').css('opacity','1.0').css('zIndex',11);
         // display details on drop: $('div.i_'+item.id+'.swarm2').children('.details').delay(200).fadeIn().delay(2000).fadeOut().delay(1000);
-            $('div.i_'+item.id+'.swarm2').delay(4500).animate({ opacity:0.25 }, 1000).delay(2000).animate({'z-index':5},0); 
+            $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.25 }, 1000).delay(2000).animate({'z-index':5},0); 
         $('div.i_'+item.id+'.user').delay(3000).animate({'z-index':11},0); // jQuery sux at pairing z-index & delays
     }
 
@@ -297,7 +302,7 @@ function updateitem(elem){
     
     storelist();
 
-    /* // prompt on first visit  */
+    /* // prompt on first visit 
     if ( first_drag && first_visit ){ 
         drag_active = true;
         showinfo(id); 
@@ -307,7 +312,11 @@ function updateitem(elem){
     else { 
         first_drag = false; 
         pre_render(item.id,'pop'); 
-    }
+    }  */
+    first_drag = false; 
+    pre_render(item.id,'pop'); 
+
+
 
 //  pre_render(item.id,'pop'); 
     saveIteration(item);//Send data to php for insert
@@ -315,6 +324,7 @@ function updateitem(elem){
 } // END updateitem()
 
 // prompt on first visit
+// disabled
 function showinfo(id){
     
     // console.log('showinfo' + ' dragactive: ' + drag_active );
@@ -586,25 +596,28 @@ $('#thecanvas li a.icon-trash').click( function(){
 
 
 /***
- * menu
+ * nav menu
  */
-/*
-    $('.navbar').delay(1000).animate(  {height:'toggle'},1000 );
-    $(document).bind('mousemove',function(e){ // ask jamie: what is this syntax?
-        if (e.pageY < 30) { 
-            $('.navbar').slideDown('slow');
-        };
+
+// create toggle button
+$('#about').before('<a id="nav-show" class="nav-toggle btn btn-inverse"><i class="icon-plus-sign icon-white"></i></a>');
+$('#about').before('<a id="nav-hide" class="nav-toggle btn"><i class="icon-minus-sign"></i></a>');
+$('#nav-hide').hide();
+$('.nav-toggle').click( function(){ toggle_menu(); });
+
+// show
+toggle_menu();
+function toggle_menu(){
+    $('#about').toggle('slow');
+    $('#nav-show').toggle();
+    $('#nav-hide').toggle();
+    // set canvas to hide about info once
+    $('#thecanvas').one("click", function(event){
+    	$('#about').fadeOut('slow'); 
+        $('#nav-show').toggle();
+        $('#nav-hide').toggle();
     });
-    $('.navbar').hover( 
-        function(){}, // mouseover
-        function(){ // mouseout
-        $(this).animate( 
-            {height:'toggle'},1000);
-    });
-*/
-
-
-
+}
 
 
 

@@ -25,7 +25,7 @@ function responsive(){
     w_offset = height/2 - $('#west').outerHeight() / 2;
     $('#west').css( 'top', w_offset);
     $('#thecanvas').css('height',height);   
-    
+
     about_max = height - 60;
     $('#about').css('maxHeight', about_max  );
 
