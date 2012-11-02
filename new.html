@@ -33,7 +33,7 @@
 
 
         <div class="container">
-            <div id="north" class="label" >top</div><div id="east" class="label" >right</div><div id="south" class="label" >bottom</div><div id="west" class="label" >left</div>
+            <div id="north" class="category" >top</div><div id="east" class="category" >right</div><div id="south" class="category" >bottom</div><div id="west" class="category" >left</div>
             
             <form class="form-horizontal" action="php/newMatrix.php" method="post" >
                 
@@ -48,19 +48,18 @@
                 </div>
                 
                 <div class="control-group">
-                    <label class="control-label" for="MATRIX_URI">URL</label>
+                    <label class="control-label" for="MATRIX_URI">URL <i class="icon-question-sign" rel="popover" data-content="Choose a unique URL to share. You can copy the full URL on the next screen." data-original-title="URL" data-trigger="hover"></i></label>
                     <div class="controls">
                         <div class="input-prepend">
                             <span class="add-on">&#187;</span>
                             <input class="" type="text" name="MATRIX_URI" id="matrix_uri" placeholder="my-topic">
-                            <!-- <button id="uri_check" class="btn" type="button">Check</button> -->
                         </div>
                     </div>
                 </div>
 
                 <section id="categories">
                     
-                    <div class="control-group category">
+                    <div class="control-group ">
                         <label class="control-label" for="matrix_north">Categories</label>
                         <div class="controls">
                             <div class="input-prepend">
@@ -69,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="control-group category">
+                    <div class="control-group ">
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">Bottom</span>
@@ -77,7 +76,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="control-group category">
+                    <div class="control-group ">
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">Left</span>
@@ -85,7 +84,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="control-group category">
+                    <div class="control-group ">
                         <div class="controls">
                             <div class="input-prepend">
                                 <span class="add-on">Right</span>

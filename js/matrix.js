@@ -43,7 +43,7 @@ var refreshInterval = setInterval(getData, 10*1000); // seconds
 var title = data[0].MATRIX_TITLE;
 var cats = data[0].MATRIX_CATS.split(",");
 $('h1').text(title);
-$('.container').append('<div id="north" class="label" >north</div><div id="east" class="label" >east</div><div id="south" class="label" >south</div><div id="west" class="label" >west</div>');
+$('.container').append('<div id="north" class="category" >north</div><div id="east" class="category" >east</div><div id="south" class="category" >south</div><div id="west" class="category" >west</div>');
 $('#north').text(cats[0]);
 $('#south').text(cats[1]);
 $('#west').text(cats[2]);
@@ -259,7 +259,7 @@ function render(i,pop){
     if(pop == 'pop') {
         $('div.i_'+item.id+'.swarm2').css('opacity','1.0').css('zIndex',11);
         // display details on drop: $('div.i_'+item.id+'.swarm2').children('.details').delay(200).fadeIn().delay(2000).fadeOut().delay(1000);
-            $('div.i_'+item.id+'.swarm2').delay(3000).animate({ opacity:0.25 }, 1000).delay(2000).animate({'z-index':5},0); 
+            $('div.i_'+item.id+'.swarm2').delay(4500).animate({ opacity:0.25 }, 1000).delay(2000).animate({'z-index':5},0); 
         $('div.i_'+item.id+'.user').delay(3000).animate({'z-index':11},0); // jQuery sux at pairing z-index & delays
     }
 

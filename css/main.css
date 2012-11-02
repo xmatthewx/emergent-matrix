@@ -1,7 +1,7 @@
 
 
 /* ----------------------
-   List
+   =List
 */
 
 body {
@@ -19,7 +19,7 @@ body {
     background:none;
     opacity:0.9;
     }
-#thecanvas div header, #info strong { 
+#thecanvas div header, #info strong, #about strong { 
     background:rgba(255,255,255,0.8);
     width:auto;
     display:inline-block;
@@ -32,9 +32,11 @@ body {
     }
 #thecanvas div header:hover { 
     background:rgba(255,255,221,1);
+    background:rgba(34,34,34,1);
+    color:white;
 }
 #thecanvas div header.drag {
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.4);
     
 }
 
@@ -54,7 +56,7 @@ body {
 }
 
 /* ----------------------
-   Details
+   =Details
 */
 
 .details { 
@@ -83,7 +85,7 @@ body {
 
 
 /* ----------------------
-Icons
+   =Icons
 */
 
 #thecanvas li a { 
@@ -102,7 +104,7 @@ Icons
 
 
 /* ----------------------
-   anchor
+   =anchor
 */
 
 span.anchor, #thecanvas div span {
@@ -132,10 +134,10 @@ span.anchor, #thecanvas div span {
 
 
 /* ----------------------
-   labels
+   =categories
 */
 
-.label { 
+.category { 
         position:absolute;
         display:inline-block;
         text-align:center;
@@ -163,58 +165,9 @@ span.anchor, #thecanvas div span {
     -moz-transform: rotate(90deg); /* Firefox */
 }
 
-/* ----------------------
-   prompts
-*/
-
-#info {
-    display:none;
-    z-index:5;
-    color:white;
-    position:absolute; top:5%;
-    width:80%;
-    height:80%;
-    margin-left:7%;
-    padding:0 10px;
-    border:0;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    background:rgba(178,204,204,0.9);
-    background:rgba(0,0,0,0.6);
-}
-#info button { color:white; opacity:0.8; }
-#info button:hover { color:white; opacity:1; }
-
-#info p { 
-    text-align:center; 
-    margin:2em 0;
-    }
-
-#info strong { /* fake items */
-    position:relative;
-    display:inline-block;
-    color:black;
-    border:0;
-}
-#info span { /* fake anchors for instructions */
-    position:absolute;
-    top:-4px; left:-4px;
-    height:8px; width:8px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    border:1px solid rgba(0,0,0,0.5);
-     }
-#info span.user { 
-    background:rgba(0,0,0,0.5);
-    border-color:transparent;
-    z-index:0;
-}  
-
 
 /* ----------------------
-   Sparkle!
+   =sparkle!
 */
 
 .sparkle {
@@ -231,7 +184,7 @@ span.anchor, #thecanvas div span {
 }  
     
 /* ----------------------
-   Stylins!
+   =structure
 */
 
 html { 
@@ -260,18 +213,47 @@ h1 {
     color:rgba(255,255,255,0.5); 
     }
 
+    
+/* ----------------------
+   =nav
+*/
+
 .navbar { z-index:2; display:none; }
 .navbar .brand { margin-left:-5px; }
 
+.nav-toggle {
+    position:absolute;
+    top:5px; right:5px;
+    z-index:101;
+}
+
+
+#about { 
+    position:absolute; 
+    z-index:99;
+    top:20px; right:30px;
+    z-index:99;
+    background:rgba(0,0,0,0.7);
+    padding:1em 20px;
+    width:350px;
+    color:white;
+    display:none;
+    overflow:auto;
+    }
+#about ul li a { 
+    background:rgba(255,234,255,0.7); 
+    }    
+
+
 
 /* ----------------------
-   forms
+   =forms
 */
 
 
 form { 
     width:500px;
-    margin:45px auto; 
+    margin:55px auto; 
     padding:15px 20px 25px;
     background:rgba(255,255,255,0.4);
     -webkit-border-radius: 4px;
@@ -291,4 +273,12 @@ form .mask {
     -moz-border-radius: 4px;
     border-radius: 4px;
     }
-    
+
+
+
+/* ----------------------
+   =misc
+*/
+
+.hidden { display:none; }
+

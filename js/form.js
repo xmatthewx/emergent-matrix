@@ -14,7 +14,7 @@ function responsive(){
     $('#east').css( 'top', e_offset);
     w_offset = height/2 - $('#west').outerHeight() / 2;
     $('#west').css( 'top', w_offset);
-    form_height = height - 130;
+    form_height = height - 150;
     $('form').css('height', form_height);
     $('form').append('<div class="mask"></div>');
 }
@@ -25,7 +25,7 @@ $(window).resize(function() {
 
 // enable tooltips
 $('a').tooltip();
-
+$('i').popover();
 
 /***
  * uri check
