@@ -1,7 +1,8 @@
 <?php 
     // does URL have /?uri
-    if(empty( $_GET['id'] )) {
+    if(empty( $_GET['id'] )) {        
         echo '<div class="alert"><strong>Hello</strong>. Make your <a href="new.html" >own matrix</a> or visit one of the others.</div>';
+        include('php/getMatrices.php');
         include('php/footer.php');
         die();        
     }

@@ -32,14 +32,4 @@
     <![endif]-->
 
 
-    <div class="navbar navbar-fixed-top navbar-inverse">
-        <div class="navbar-inner">
-            <a class="brand" href="index.html">Emergent Matrix</a>
-            <ul class="nav filter">
-                <li><a href="#">about</a></li>
-            </ul>
-        </div>
-    </div>
-
-
     <div class="container">

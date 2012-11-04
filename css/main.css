@@ -244,6 +244,14 @@ h1 {
     background:rgba(255,234,255,0.7); 
     }    
 
+@media only screen and (max-width : 480px) {
+
+    #about { 
+        top:20px; right:20px;
+        padding:1em 20px;
+        width:300px;
+
+    }
 
 
 /* ----------------------
