@@ -2,7 +2,7 @@
 
         <section id="about" >
             <h3>Instructions</h3>
-            <p><span class="" style="font-size:1em;"><i class="icon-move icon-white"></i> Move an item to give your input.</span></p>
+            <p><span class="" style="font-size:1em;"><i class="icon-move icon-white"></i> Move an item to give your input.</span> Where do you think it falls on the spectrum?</p>
             <p class="hidden"><strong><span class="user"></span>your input</strong></p>
             <h4>Why?</h4>
             <p>This app merges survey and visualization. You will see your input in the foreground and the average from all respondents behind it. We will also show a sample of other replies dotted across the screen.</p>
