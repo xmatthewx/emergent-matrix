@@ -12,6 +12,7 @@ A: What's final? If they learn or think something that adjusts their ideas an in
 Q: Are all averages the same?
 A: No. An average could represent 100 people with the same input and two groups of 50 people with exactly opposite opinions. So... we are working to show a representative sample of inputs (show time and location), in addition to average.
 
-
+"At first, all uncertainties seem unique. But by stepping back, we can reduce bundles of uncertainties that have some commonality to a single spectrum, an axis of uncertainty. If we can simplify our entire list of related uncertainties into two orthogonal axes, then we can define a matrix (two axes crossing) that allows us to define four very different, but plausible, quadrants of uncertainty. Each of these far corners is, in essence, a logical future that we can explore."
+ - Lawrence Wilkinson, Wired.com. 2009. http://www.wired.com/wired/scenarios/build.html
 
 
